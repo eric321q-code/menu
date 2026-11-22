@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>頂尖業務核心心法｜實戰互動手冊</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      background-color: #0b1120;
+      color: #f8fafc;
+    }
+    .gold-gradient {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    }
+    .gold-text {
+      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .card-glass {
+      background: rgba(30, 41, 59, 0.7);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .tab-active {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(217, 119, 6, 0.1) 100%);
+      border-color: #f59e0b;
+      color: #fbbf24;
+    }
+    .fade-in {
+      animation: fadeIn 0.35s ease-out forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="min-h-screen antialiased selection:bg-amber-500 selection:text-slate-900">
+
+  <!-- Header / Hero -->
+  <header class="relative overflow-hidden border-b border-slate-800/80 bg-slate-950/60">
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-amber-500/10 via-slate-950/0 to-slate-950/0 pointer-events-none"></div>
+    <div class="max-w-5xl mx-auto px-6 py-14 md:py-20 relative z-10">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-medium tracking-wider mb-6">
+        <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+        TOP SALES MINDSET PLAYBOOK
+      </div>
+      <h1 class="text-3xl md:text-5xl font-black tracking-tight leading-tight mb-4">
+        頂尖業務的<span class="gold-text">核心心法</span>
+      </h1>
+      <p class="text-slate-300 text-lg md:text-xl max-w-2xl leading-relaxed mb-8">
+        業務的本質不是「把東西賣出去」，而是在<strong class="text-white font-semibold">建立信任</strong>的前提下，<strong class="text-white font-semibold">精準解決客戶痛點</strong>，並完成等價的價值交換。
+      </p>
+
+      <!-- Daily Mindset Card Drawer -->
+      <div class="card-glass rounded-2xl p-6 md:p-8 max-w-3xl shadow-2xl border-amber-500/20">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+          <span class="text-xs font-bold uppercase tracking-widest text-amber-400">每日心態校準卡</span>
+          <button onclick="drawMindsetCard()" class="px-4 py-2 rounded-lg gold-gradient text-slate-950 font-bold text-sm hover:opacity-90 transition cursor-pointer shadow-lg shadow-amber-500/20">
+            抽取今日心態卡 ↻
+          </button>
+        </div>
+        <div id="mindset-card-display" class="fade-in">
+          <p id="card-quote" class="text-xl md:text-2xl font-bold text-white mb-2">
+            「醫生不會在還沒把脈前就狂開藥；頂尖業務也不會在還沒聽懂痛點前就報價。」
+          </p>
+          <p id="card-action" class="text-sm text-amber-300/90 flex items-start gap-2">
+            <span class="font-bold shrink-0">今日微行動：</span>
+            <span>下一通電話或會議，前 10 分鐘只提問與傾聽，不主動介紹任何產品規格。</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-6 py-12 space-y-16">
+
+    <!-- Section 1: Four Pillars Interactive Tabs -->
+    <section>
+      <div class="mb-8">
+        <h2 class="text-2xl md:text-3xl font-bold text-white mb-2">四大核心維度實戰拆解</h2>
+        <p class="text-slate-400 text-sm md:text-base">點擊下方心法模組，切換查看思維對比與互動評估工具。</p>
+      </div>
+
+      <!-- Tab Buttons -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+        <button onclick="switchPillar(0)" id="tab-0" class="tab-btn tab-active text-left p-4 rounded-xl border border-slate-800 bg-slate-900/60 transition cursor-pointer">
+          <div class="text-xs text-slate-400 mb-1">心法 01</div>
+          <div class="font-bold text-base">診斷而非推銷</div>
+        </button>
+        <button onclick="switchPillar(1)" id="tab-1" class="tab-btn text-left p-4 rounded-xl border border-slate-800 bg-slate-900/60 text-slate-300 hover:border-slate-700 transition cursor-pointer">
+          <div class="text-xs text-slate-400 mb-1">心法 02</div>
+          <div class="font-bold text-base">建立信任帳戶</div>
+        </button>
+        <button onclick="switchPillar(2)" id="tab-2" class="tab-btn text-left p-4 rounded-xl border border-slate-800 bg-slate-900/60 text-slate-300 hover:border-slate-700 transition cursor-pointer">
+          <div class="text-xs text-slate-400 mb-1">心法 03</div>
+          <div class="font-bold text-base">漏斗篩選與推進</div>
+        </button>
+        <button onclick="switchPillar(3)" id="tab-3" class="tab-btn text-left p-4 rounded-xl border border-slate-800 bg-slate-900/60 text-slate-300 hover:border-slate-700 transition cursor-pointer">
+          <div class="text-xs text-slate-400 mb-1">心法 04</div>
+          <div class="font-bold text-base">把拒絕當常態</div>
+        </button>
+      </div>
+
+      <!-- Tab Panels -->
+      <div class="card-glass rounded-2xl p-6 md:p-8 min-h-[340px]">
+        <!-- Panel 0: Diagnosis vs Selling -->
+        <div id="panel-0" class="pillar-panel fade-in space-y-6">
+          <div class="border-b border-slate-800 pb-4">
+            <h3 class="text-xl font-bold text-amber-400">看病而非賣藥：挖掘表面需求背後的真實痛點</h3>
+            <p class="text-slate-300 text-sm mt-1">客戶想買的從來不是產品功能，而是「問題被解決後的狀態」。</p>
+          </div>
+          <div class="grid md:grid-cols-2 gap-6">
+            <div class="bg-slate-900/80 border border-rose-500/20 rounded-xl p-5">
+              <div class="text-rose-400 font-bold text-sm mb-3 flex items-center gap-2">
+                <span>✕</span> 普通業務（推銷思維）
+              </div>
+              <ul class="space-y-3 text-sm text-slate-300">
+                <li>• 一見面就背誦產品規格、功能有多強大。</li>
+                <li>• 客戶一猶豫就急著降價或送贈品。</li>
+                <li>• 誤以為「我講得夠多，客戶就會買單」。</li>
+                <li class="text-rose-300/90 pt-2 border-t border-slate-800">結果：引發客戶高度防備，陷入無止盡的比價泥淖。</li>
+              </ul>
+            </div>
+            <div class="bg-slate-900/80 border border-emerald-500/30 rounded-xl p-5">
+              <div class="text-emerald-400 font-bold text-sm mb-3 flex items-center gap-2">
+                <span>✓</span> 頂尖業務（診斷思維）
+              </div>
+              <ul class="space-y-3 text-sm text-slate-300">
+                <li>• 先問現況與困擾：「目前這塊流程最耗時的地方在哪？」</li>
+                <li>• 量化痛點代價：「如果半年內沒解決，會影響多少營收？」</li>
+                <li>• 讓客戶自己說出「我需要改變」。</li>
+                <li class="text-emerald-300/90 pt-2 border-t border-slate-800">結果：成為客戶眼中的問題解決專家，價格不再是唯一考量。</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel 1: Trust Account -->
+        <div id="panel-1" class="pillar-panel hidden fade-in space-y-6">
+          <div class="border-b border-slate-800 pb-4">
+            <h3 class="text-xl font-bold text-amber-400">成交順序定律：人品信任 → 專業認同 → 產品買單</h3>
+            <p class="text-slate-300 text-sm mt-1">在同質化嚴重的市場中，「靠譜」與「誠實」是最高級的差異化。</p>
+          </div>
+          <div class="grid md:grid-cols-3 gap-4">
+            <div class="bg-slate-900/80 p-5 rounded-xl border border-slate-800">
+              <div class="text-amber-400 font-black text-2xl mb-2">01</div>
+              <h4 class="font-bold text-white mb-2">敢於說「不適合」</h4>
+              <p class="text-sm text-slate-300 leading-relaxed">當產品無法解決客戶問題時，坦誠告知並給予替代建議。這份誠實會瞬間建立無可取代的信任感。</p>
+            </div>
+            <div class="bg-slate-900/80 p-5 rounded-xl border border-slate-800">
+              <div class="text-amber-400 font-black text-2xl mb-2">02</div>
+              <h4 class="font-bold text-white mb-2">提供確定性（靠譜）</h4>
+              <p class="text-sm text-slate-300 leading-relaxed">答應下午三點給報價，兩點五十就寄出。事事有回應、件件有著落，讓客戶把案子交給你「很放心」。</p>
+            </div>
+            <div class="bg-slate-900/80 p-5 rounded-xl border border-slate-800">
+              <div class="text-amber-400 font-black text-2xl mb-2">03</div>
+              <h4 class="font-bold text-white mb-2">利他資訊分享</h4>
+              <p class="text-sm text-slate-300 leading-relaxed">不談成交時，主動分享產業趨勢、競品動態或避坑指南，持續往客戶的「信任帳戶」裡存款。</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel 2: Funnel & BANT Calculator -->
+        <div id="panel-2" class="pillar-panel hidden fade-in space-y-6">
+          <div class="border-b border-slate-800 pb-4">
+            <h3 class="text-xl font-bold text-amber-400">BANT 商機資格評估器：把時間留給對的客戶</h3>
+            <p class="text-slate-300 text-sm mt-1">勾選你目前正在跟進的某位客戶條件，即時評估商機成熟度與下一步策略：</p>
+          </div>
+          <div class="grid md:grid-cols-2 gap-6 items-center">
+            <div class="space-y-3">
+              <label class="flex items-start gap-3 p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 cursor-pointer hover:border-amber-500/40 transition">
+                <input type="checkbox" class="bant-check mt-1 w-4 h-4 accent-amber-500" value="25" onchange="calcBANT()">
+                <div>
+                  <div class="font-bold text-sm text-white">B - Budget（預算）</div>
+                  <div class="text-xs text-slate-400">客戶有明確預算，或具備調動資金的財力</div>
+                </div>
+              </label>
+              <label class="flex items-start gap-3 p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 cursor-pointer hover:border-amber-500/40 transition">
+                <input type="checkbox" class="bant-check mt-1 w-4 h-4 accent-amber-500" value="25" onchange="calcBANT()">
+                <div>
+                  <div class="font-bold text-sm text-white">A - Authority（決策權）</div>
+                  <div class="text-xs text-slate-400">你正在跟最終拍板的人對話，或能透過他接觸決策者</div>
+                </div>
+              </label>
+              <label class="flex items-start gap-3 p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 cursor-pointer hover:border-amber-500/40 transition">
+                <input type="checkbox" class="bant-check mt-1 w-4 h-4 accent-amber-500" value="30" onchange="calcBANT()">
+                <div>
+                  <div class="font-bold text-sm text-white">N - Need（剛性痛點）</div>
+                  <div class="text-xs text-slate-400">客戶明確承認問題存在，且不解決會有實際損失</div>
+                </div>
+              </label>
+              <label class="flex items-start gap-3 p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 cursor-pointer hover:border-amber-500/40 transition">
+                <input type="checkbox" class="bant-check mt-1 w-4 h-4 accent-amber-500" value="20" onchange="calcBANT()">
+                <div>
+                  <div class="font-bold text-sm text-white">T - Timeline（時間表）</div>
+                  <div class="text-xs text-slate-400">有明確的啟動或上線截止日期</div>
+                </div>
+              </label>
+            </div>
+            <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-6 text-center space-y-4">
+              <div class="text-xs uppercase tracking-widest text-slate-400">商機成交成熟度</div>
+              <div id="bant-score" class="text-5xl font-black gold-text">0%</div>
+              <div id="bant-advice" class="text-sm text-slate-300 bg-slate-900 p-4 rounded-lg border border-slate-800 text-left leading-relaxed">
+                請勾選左側條件，系統將為你診斷該客戶的推進優先級與行動建議。
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel 3: Rejection Reframing -->
+        <div id="panel-3" class="pillar-panel hidden fade-in space-y-6">
+          <div class="border-b border-slate-800 pb-4">
+            <h3 class="text-xl font-bold text-amber-400">拒絕復盤檢核器：把「不要」轉化為「市場情報」</h3>
+            <p class="text-slate-300 text-sm mt-1">點擊客戶最常說的拒絕藉口，拆解背後的潛台詞與破冰回應：</p>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <button onclick="showObjection(0)" class="obj-btn px-4 py-2 rounded-lg bg-amber-500/20 border border-amber-500 text-amber-300 text-sm font-medium cursor-pointer">「我再考慮看看」</button>
+            <button onclick="showObjection(1)" class="obj-btn px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 text-sm font-medium hover:border-slate-500 cursor-pointer">「你們價格太貴了」</button>
+            <button onclick="showObjection(2)" class="obj-btn px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 text-sm font-medium hover:border-slate-500 cursor-pointer">「我們現在已經有配合廠商了」</button>
+          </div>
+          <div id="objection-detail" class="bg-slate-900/90 border border-slate-800 rounded-xl p-5 space-y-3">
+            <div>
+              <span class="text-xs font-bold text-amber-400 uppercase">客戶潛台詞：</span>
+              <p id="obj-subtext" class="text-sm text-slate-200 mt-1">這通常不是真的要回家想，而是「我還沒看到非買不可的價值」或「我有顧慮但不好意思直說」。</p>
+            </div>
+            <div class="pt-3 border-t border-slate-800">
+              <span class="text-xs font-bold text-emerald-400 uppercase">顧問型破冰提問：</span>
+              <p id="obj-response" class="text-sm text-white font-medium mt-1">「完全理解，這確實需要謹慎評估。通常客戶說再考慮，多半是在『預算分配』或『導入後的執行成效』這兩點上還有疑慮，方便請教您目前最在意的是哪一塊嗎？」</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Script Translator -->
+    <section>
+      <div class="mb-6">
+        <h2 class="text-2xl md:text-3xl font-bold text-white mb-2">實戰話術轉譯器</h2>
+        <p class="text-slate-400 text-sm md:text-base">切換不同銷售場景，對比「自我中心推銷」與「痛點導向顧問」的說法差異。</p>
+      </div>
+
+      <div class="card-glass rounded-2xl p-6 md:p-8 space-y-6">
+        <div class="flex flex-wrap gap-2">
+          <button onclick="switchScenario(0)" id="scen-0" class="scen-btn px-4 py-2 rounded-lg bg-amber-500 text-slate-950 font-bold text-sm cursor-pointer">場景一：初次破冰開場</button>
+          <button onclick="switchScenario(1)" id="scen-1" class="scen-btn px-4 py-2 rounded-lg bg-slate-800 text-slate-300 font-medium text-sm hover:bg-slate-700 cursor-pointer">場景二：產品價值呈現</button>
+          <button onclick="switchScenario(2)" id="scen-2" class="scen-btn px-4 py-2 rounded-lg bg-slate-800 text-slate-300 font-medium text-sm hover:bg-slate-700 cursor-pointer">場景三：推進下一步（Next Step）</button>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="p-5 rounded-xl bg-slate-950/70 border border-slate-800">
+            <div class="text-xs font-bold text-slate-400 mb-2">一般業務這樣說（容易被句點）</div>
+            <p id="bad-script" class="text-slate-300 text-sm leading-relaxed">
+              「王經理您好，我是某某公司的業務，我們公司成立十年了，最近推出一套很棒的系統，想跟您約個時間介紹一下我們的產品功能。」
+            </p>
+          </div>
+          <div class="p-5 rounded-xl bg-amber-500/10 border border-amber-500/30">
+            <div class="text-xs font-bold text-amber-400 mb-2">頂尖業務這樣說（引發好奇與共鳴）</div>
+            <p id="good-script" class="text-white text-sm leading-relaxed font-medium">
+              「王經理您好，我們近期協助了三家同業解決『月底對帳耗時三天』的問題，平均幫他們省下 60% 的人力工時。不確定貴部門目前在結帳流程上是否也有類似困擾？想借您 10 分鐘交流一下做法。」
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Pre-Meeting Checklist -->
+    <section class="pb-10">
+      <div class="card-glass rounded-2xl p-6 md:p-8 border-slate-800">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+          <div>
+            <h2 class="text-xl md:text-2xl font-bold text-white">拜訪／提案前 30 秒心態檢核</h2>
+            <p class="text-slate-400 text-sm mt-1">走進會議室前，確認自己處於「不卑不亢的專家狀態」：</p>
+          </div>
+          <span id="checklist-status" class="text-xs font-bold px-3 py-1.5 rounded-full bg-slate-800 text-slate-400">已完成 0 / 3 項</span>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-4">
+          <label class="flex items-start gap-3 p-4 rounded-xl bg-slate-900/80 border border-slate-800 cursor-pointer hover:border-amber-500/40 transition">
+            <input type="checkbox" class="pre-check mt-1 w-4 h-4 accent-amber-500" onchange="updateChecklist()">
+            <span class="text-sm text-slate-200">我今天不是來「求成交」的，而是來幫對方「診斷問題」的。</span>
+          </label>
+          <label class="flex items-start gap-3 p-4 rounded-xl bg-slate-900/80 border border-slate-800 cursor-pointer hover:border-amber-500/40 transition">
+            <input type="checkbox" class="pre-check mt-1 w-4 h-4 accent-amber-500" onchange="updateChecklist()">
+            <span class="text-sm text-slate-200">我已經準備好 3 個能挖掘對方痛點的開放式問題。</span>
+          </label>
+          <label class="flex items-start gap-3 p-4 rounded-xl bg-slate-900/80 border border-slate-800 cursor-pointer hover:border-amber-500/40 transition">
+            <input type="checkbox" class="pre-check mt-1 w-4 h-4 accent-amber-500" onchange="updateChecklist()">
+            <span class="text-sm text-slate-200">結束前，我一定會確認一個明確的「下一步時間點」。</span>
+          </label>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="border-t border-slate-800/80 py-8 text-center text-xs text-slate-500">
+    Sales Mindset Playbook · 專注信任與價值交換的實戰指南
+  </footer>
+
+  <script>
+    // 1. Daily Mindset Cards
+    const mindsetCards = [
+      {
+        quote: "「醫生不會在還沒把脈前就狂開藥；頂尖業務也不會在還沒聽懂痛點前就報價。」",
+        action: "下一通電話或會議，前 10 分鐘只提問與傾聽，不主動介紹任何產品規格。"
+      },
+      {
+        quote: "「客戶拒絕的不是你這個人，而是他還沒看見『改變現狀』的必要性。」",
+        action: "回顧最近一筆沒成交的案子，寫下客戶「不買單也沒有損失」的原因。"
+      },
+      {
+        quote: "「成交不是銷售的結束，而是信任帳戶真正開始計息的起點。」",
+        action: "挑一位已成交或潛在客戶，傳送一篇對他工作有幫助的產業資訊，完全不提產品。"
+      },
+      {
+        quote: "「沒有明確『下一步』的拜訪，都只是在幫客戶免費上課。」",
+        action: "今天每一場客戶對話結束前，務必敲定下一次聯繫或測試的具體日期。"
+      },
+      {
+        quote: "「敢直接告訴客戶『這個方案不適合你』的業務，最容易贏得長期大單。」",
+        action: "檢視手頭上的報價單，是否有不適合的客戶？試著誠實給予最適配的建議。"
+      }
+    ];
+
+    let currentCardIdx = 0;
+    function drawMindsetCard() {
+      let nextIdx;
+      do {
+        nextIdx = Math.floor(Math.random() * mindsetCards.length);
+      } while (nextIdx === currentCardIdx);
+      currentCardIdx = nextIdx;
+
+      const display = document.getElementById('mindset-card-display');
+      display.classList.remove('fade-in');
+      void display.offsetWidth;
+      display.classList.add('fade-in');
+
+      document.getElementById('card-quote').textContent = mindsetCards[currentCardIdx].quote;
+      document.getElementById('card-action').innerHTML = `<span class="font-bold shrink-0">今日微行動：</span><span>${mindsetCards[currentCardIdx].action}</span>`;
+    }
+
+    // 2. Pillar Tabs
+    function switchPillar(idx) {
+      document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+        if (i === idx) {
+          btn.classList.add('tab-active');
+          btn.classList.remove('text-slate-300');
+        } else {
+          btn.classList.remove('tab-active');
+          btn.classList.add('text-slate-300');
+        }
+      });
+
+      document.querySelectorAll('.pillar-panel').forEach((panel, i) => {
+        if (i === idx) {
+          panel.classList.remove('hidden');
+        } else {
+          panel.classList.add('hidden');
+        }
+      });
+    }
+
+    // 3. BANT Calculator
+    function calcBANT() {
+      let score = 0;
+      document.querySelectorAll('.bant-check:checked').forEach(cb => {
+        score += parseInt(cb.value, 10);
+      });
+      document.getElementById('bant-score').textContent = score + '%';
+
+      const adviceEl = document.getElementById('bant-advice');
+      if (score === 0) {
+        adviceEl.innerHTML = '請勾選左側條件，系統將為你診斷該客戶的推進優先級與行動建議。';
+      } else if (score <= 30) {
+        adviceEl.innerHTML = '<strong class="text-rose-400">【低成熟度｜培育期】</strong><br>目前缺乏關鍵成交要素，切勿過度投入客製化提案。建議放入定期追蹤名單，持續提供產業資訊培育即可。';
+      } else if (score <= 75) {
+        adviceEl.innerHTML = '<strong class="text-amber-400">【中成熟度｜攻堅期】</strong><br>具備推進潛力！請針對「未勾選」的項目設計提問（例如：若缺決策權，詢問內部評估流程；若缺時間表，協助計算延遲成本）。';
+      } else {
+        adviceEl.innerHTML = '<strong class="text-emerald-400">【高成熟度｜鎖單期】</strong><br>這是標準的 A 級高價值商機！請立即鎖定決策者，排除最後的執行顧慮，直接提出具體合約與啟動時間表。';
+      }
+    }
+
+    // 4. Objection Handler
+    const objections = [
+      {
+        subtext: "這通常不是真的要回家想，而是「我還沒看到非買不可的價值」或「我有顧慮但不好意思直說」。",
+        response: "「完全理解，這確實需要謹慎評估。通常客戶說再考慮，多半是在『預算分配』或『導入後的執行成效』這兩點上還有疑慮，方便請教您目前最在意的是哪一塊嗎？」"
+      },
+      {
+        subtext: "客戶覺得「貴」，是因為他只看到了「價格數字」，還沒看見這筆支出能幫他「省下或賺回多少錢」。",
+        response: "「單看報價確實是一筆預算。不過如果這套方案每個月能幫團隊省下 40 小時加班費，大概 3 個月就能回本。如果是因為初期預算考量，我們也可以先從核心模組開始階段性導入。」"
+      },
+      {
+        subtext: "代表客戶對現狀還算滿意，不願意承擔「更換廠商的風險與麻煩」。",
+        response: "「有穩定配合的夥伴很棒！我今天不是要您馬上更換，只是想分享我們最近幫同業在『售後即時支援』上做的優化。多認識一個備選方案，未來您需要比價或應急時也多一張底牌。」"
+      }
+    ];
+
+    function showObjection(idx) {
+      document.querySelectorAll('.obj-btn').forEach((btn, i) => {
+        if (i === idx) {
+          btn.className = "obj-btn px-4 py-2 rounded-lg bg-amber-500/20 border border-amber-500 text-amber-300 text-sm font-medium cursor-pointer";
+        } else {
+          btn.className = "obj-btn px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 text-sm font-medium hover:border-slate-500 cursor-pointer";
+        }
+      });
+      document.getElementById('obj-subtext').textContent = objections[idx].subtext;
+      document.getElementById('obj-response').textContent = objections[idx].response;
+    }
+
+    // 5. Scenario Script Translator
+    const scenarios = [
+      {
+        bad: "「王經理您好，我是某某公司的業務，我們公司成立十年了，最近推出一套很棒的系統，想跟您約個時間介紹一下我們的產品功能。」",
+        good: "「王經理您好，我們近期協助了三家同業解決『月底對帳耗時三天』的問題，平均幫他們省下 60% 的人力工時。不確定貴部門目前在結帳流程上是否也有類似困擾？想借您 10 分鐘交流一下做法。」"
+      },
+      {
+        bad: "「我們這個方案採用最新雲端架構，支援多維度數據報表，而且現在簽約還送三個月免費維護，CP值非常高！」",
+        good: "「剛才您提到業務主管每週都要花半天手動整理報表；用這套自動看板後，週一早上打開手機就能直接看各區達成率，把那半天省下來直接跑客戶。」"
+      },
+      {
+        bad: "「那今天先介紹到這邊，資料我寄給您，您看過之後有需要再隨時跟我聯絡喔！」",
+        good: "「為了讓您內部討論更有依據，我明天中午前把針對貴司規模試算的 ROI 評估表寄給您。我們先約週四下午兩點通個 10 分鐘電話，確認方向是否符合預期，您看方便嗎？」"
+      }
+    ];
+
+    function switchScenario(idx) {
+      document.querySelectorAll('.scen-btn').forEach((btn, i) => {
+        if (i === idx) {
+          btn.className = "scen-btn px-4 py-2 rounded-lg bg-amber-500 text-slate-950 font-bold text-sm cursor-pointer";
+        } else {
+          btn.className = "scen-btn px-4 py-2 rounded-lg bg-slate-800 text-slate-300 font-medium text-sm hover:bg-slate-700 cursor-pointer";
+        }
+      });
+      document.getElementById('bad-script').textContent = scenarios[idx].bad;
+      document.getElementById('good-script').textContent = scenarios[idx].good;
+    }
+
+    // 6. Pre-Meeting Checklist
+    function updateChecklist() {
+      const total = document.querySelectorAll('.pre-check').length;
+      const checked = document.querySelectorAll('.pre-check:checked').length;
+      const statusEl = document.getElementById('checklist-status');
+      statusEl.textContent = `已完成 ${checked} / ${total} 項`;
+      if (checked === total) {
+        statusEl.className = "text-xs font-bold px-3 py-1.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40";
+        statusEl.textContent = "✓ 狀態就緒，準備進場！";
+      } else {
+        statusEl.className = "text-xs font-bold px-3 py-1.5 rounded-full bg-slate-800 text-slate-400";
+      }
+    }
+  </script>
+</body>
+</html>
