@@ -1,0 +1,219 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>每週健身計畫</title>
+<style>
+/* Layout: single column, three training-day cards, each listing the same four moves with tappable set buttons. */
+:root {
+  --bg: #f6f5f1;
+  --surface: #ffffff;
+  --fg: #1d1f1c;
+  --muted: #6b6f68;
+  --line: #e2e1da;
+  --accent: #2f6b4f;
+  --accent-soft: #e4efe9;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #161815;
+    --surface: #1f221e;
+    --fg: #ecefe9;
+    --muted: #9ca398;
+    --line: #2e332d;
+    --accent: #8fd1ad;
+    --accent-soft: #233a2e;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #161815;
+  --surface: #1f221e;
+  --fg: #ecefe9;
+  --muted: #9ca398;
+  --line: #2e332d;
+  --accent: #8fd1ad;
+  --accent-soft: #233a2e;
+  color-scheme: dark;
+}
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: "Noto Sans TC", "Inter", system-ui, -apple-system, "PingFang TC", sans-serif;
+  line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-top: 1.5rem;
+  padding-bottom: 2rem;
+}
+main { max-width: 640px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.25rem; }
+header h1 { font-size: 1.6rem; margin: 0 0 0.25rem; text-wrap: balance; }
+header p { margin: 0; color: var(--muted); font-size: 0.95rem; }
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+.card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.75rem;
+}
+.card h2 { font-size: 1.15rem; margin: 0; display: flex; align-items: center; gap: 0.5rem; }
+.badge {
+  font-size: 0.8rem;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border-radius: 999px;
+  padding: 0.1rem 0.6rem;
+  font-weight: 500;
+}
+.reset {
+  font: inherit;
+  font-size: 0.85rem;
+  color: var(--muted);
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.2rem 0.75rem;
+  cursor: pointer;
+}
+.reset:hover { color: var(--fg); }
+ol.moves { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.6rem; }
+ol.moves li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--line);
+  min-width: 0;
+}
+ol.moves li:last-child { border-bottom: 0; padding-bottom: 0; }
+.move-name { font-weight: 500; min-width: 0; overflow-wrap: anywhere; }
+.move-meta { color: var(--muted); font-size: 0.9rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.sets { display: flex; gap: 0.4rem; }
+.set {
+  font: inherit;
+  font-size: 0.85rem;
+  min-width: 2.6rem;
+  padding: 0.35rem 0.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--fg);
+  cursor: pointer;
+  font-variant-numeric: tabular-nums;
+}
+.set[aria-pressed="true"] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--surface);
+  font-weight: 500;
+}
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+</style>
+
+<main>
+  <header>
+    <h1>每週健身計畫</h1>
+    <p>每週訓練日：二、四、六。完成一組就點一下該組按鈕。</p>
+  </header>
+
+  <section class="card" data-day="tue" aria-labelledby="d2">
+    <div class="card-head">
+      <h2 id="d2">星期二 <span class="badge">訓練日</span></h2>
+      <button class="reset" type="button">重設本日</button>
+    </div>
+    <ol class="moves">
+      <li data-move="pushup"><span class="move-name">伏地挺身 <span class="move-meta">15 下</span></span><span class="sets"></span></li>
+      <li data-move="squat"><span class="move-name">深蹲 <span class="move-meta">15 下</span></span><span class="sets"></span></li>
+      <li data-move="situp"><span class="move-name">仰臥起坐 <span class="move-meta">15 下</span></span><span class="sets"></span></li>
+      <li data-move="plank"><span class="move-name">直立棒次 <span class="move-meta">30 秒</span></span><span class="sets"></span></li>
+    </ol>
+  </section>
+
+  <section class="card" data-day="thu" aria-labelledby="d4">
+    <div class="card-head">
+      <h2 id="d4">星期四 <span class="badge">訓練日</span></h2>
+      <button class="reset" type="button">重設本日</button>
+    </div>
+    <ol class="moves">
+      <li data-move="pushup"><span class="move-name">伏地挺身 <span class="move-meta">15 下</span></span><span class="sets"></span></li>
+      <li data-move="squat"><span class="move-name">深蹲 <span class="move-meta">15 下</span></span><span class="sets"></span></li>
+      <li data-move="situp"><span class="move-name">仰臥起坐 <span class="move-meta">15 下</span></span><span class="sets"></span></li>
+      <li data-move="plank"><span class="move-name">直立棒次 <span class="move-meta">30 秒</span></span><span class="sets"></span></li>
+    </ol>
+  </section>
+
+  <section class="card" data-day="sat" aria-labelledby="d6">
+    <div class="card-head">
+      <h2 id="d6">星期六 <span class="badge">訓練日</span></h2>
+      <button class="reset" type="button">重設本日</button>
+    </div>
+    <ol class="moves">
+      <li data-move="pushup"><span class="move-name">伏地挺身 <span class="move-meta">15 下</span></span><span class="sets"></span></li>
+      <li data-move="squat"><span class="move-name">深蹲 <span class="move-meta">15 下</span></span><span class="sets"></span></li>
+      <li data-move="situp"><span class="move-name">仰臥起坐 <span class="move-meta">15 下</span></span><span class="sets"></span></li>
+      <li data-move="plank"><span class="move-name">直立棒次 <span class="move-meta">30 秒</span></span><span class="sets"></span></li>
+    </ol>
+  </section>
+</main>
+
+<script>
+(function () {
+  var KEY = "workout-plan-progress";
+  var SETS = 3;
+  var state = {};
+  try { state = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) { state = {}; }
+
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
+  }
+
+  function refresh(btn) {
+    var on = !!state[btn.dataset.key];
+    btn.setAttribute("aria-pressed", on ? "true" : "false");
+    btn.setAttribute("aria-label", btn.dataset.label + (on ? "，已完成" : "，未完成"));
+  }
+
+  document.querySelectorAll(".card").forEach(function (card) {
+    var day = card.dataset.day;
+    card.querySelectorAll("li[data-move]").forEach(function (li) {
+      var box = li.querySelector(".sets");
+      var move = li.dataset.move;
+      for (var n = 1; n <= SETS; n++) {
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "set";
+        btn.textContent = "第" + n + "組";
+        btn.dataset.key = day + "-" + move + "-" + n;
+        btn.dataset.label = li.querySelector(".move-name").firstChild.textContent.trim() + " 第" + n + "組";
+        btn.addEventListener("click", (function (b) {
+          return function () {
+            state[b.dataset.key] = !state[b.dataset.key];
+            if (!state[b.dataset.key]) delete state[b.dataset.key];
+            save();
+            refresh(b);
+          };
+        })(btn));
+        refresh(btn);
+        box.appendChild(btn);
+      }
+    });
+
+    card.querySelector(".reset").addEventListener("click", function () {
+      card.querySelectorAll("button.set").forEach(function (b) {
+        delete state[b.dataset.key];
+        refresh(b);
+      });
+      save();
+    });
+  });
+})();
+</script>
+
+</body></html>
