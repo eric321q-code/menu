@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#101827">
+<title>Galaxy S24 Ultra｜長期保養攻略</title>
+<style>
+:root{--bg:#0b1220;--panel:#131e30;--panel2:#19263a;--text:#edf3fb;--muted:#a8b6c9;--line:#2a3a51;--accent:#79d6c3;--gold:#f2c879}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(160deg,#0b1220,#101b2d 55%,#0b1220);color:var(--text);font-family:system-ui,-apple-system,"Noto Sans TC",sans-serif;line-height:1.65}
+.wrap{max-width:1050px;margin:auto;padding:26px 18px 60px}.hero{padding:34px 28px;border:1px solid var(--line);border-radius:24px;background:radial-gradient(circle at 90% 10%,#29435a 0,transparent 36%),linear-gradient(135deg,#182a40,#101a2b)}
+.eyebrow{color:var(--accent);font-size:.82rem;font-weight:800;letter-spacing:.12em}.hero h1{font-size:clamp(2rem,5vw,3.5rem);line-height:1.15;margin:12px 0}.hero p{max-width:680px;color:var(--muted);margin:12px 0 0}.pill{display:inline-block;border:1px solid #456178;border-radius:99px;padding:5px 12px;color:#d6e8f5;font-size:.85rem;margin:4px 5px 0 0}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0}.stat,.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px}.stat strong{display:block;font-size:1.4rem;color:var(--accent)}.stat span{font-size:.88rem;color:var(--muted)}
+h2{font-size:1.45rem;margin:30px 0 12px}h3{margin:0 0 8px;font-size:1.08rem}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.card p,.card li{color:var(--muted)}.card ul{padding-left:20px;margin:8px 0}.tag{font-size:.76rem;color:var(--accent);font-weight:800;letter-spacing:.06em}.notice{border-left:3px solid var(--gold);background:#211f1a;padding:12px 15px;border-radius:8px;color:#e9d8b6;margin:14px 0}
+.checklist{display:grid;gap:9px}.check{display:flex;align-items:flex-start;gap:11px;padding:12px 13px;background:var(--panel2);border:1px solid var(--line);border-radius:12px}.check input{width:19px;height:19px;margin-top:4px;accent-color:var(--accent);flex-shrink:0}.check span{flex:1}.check small{display:block;color:var(--muted)}.progress{height:9px;background:#26364b;border-radius:20px;overflow:hidden;margin:10px 0 5px}.bar{height:100%;width:0;background:var(--accent);transition:width .2s}.progressline{display:flex;justify-content:space-between;color:var(--muted);font-size:.88rem}
+table{width:100%;border-collapse:collapse;background:var(--panel);border-radius:14px;overflow:hidden}td,th{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line)}th{color:var(--accent);background:#19283b}td{color:var(--muted)}tr:last-child td{border:0}
+details{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:13px 16px;margin:9px 0}summary{cursor:pointer;font-weight:700}details p{color:var(--muted);margin-bottom:2px}.footer{color:var(--muted);font-size:.85rem;margin-top:28px;border-top:1px solid var(--line);padding-top:18px}
+button{border:0;background:var(--accent);color:#08201d;font-weight:800;padding:10px 15px;border-radius:10px;cursor:pointer}button.secondary{background:#26384e;color:var(--text);border:1px solid var(--line)}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}
+@media(max-width:700px){.stats{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.hero{padding:25px 20px}td,th{padding:10px 8px;font-size:.9rem}}
+</style>
+</head>
+<body>
+<main class="wrap">
+<header class="hero">
+ <div class="eyebrow">GALAXY CARE GUIDE · 個人保養手冊</div>
+ <h1>讓 S24 Ultra<br>陪你更久一點。</h1>
+ <p>一份可以每天照著做的長期保養攻略。把重點放在電池溫度、充電習慣、螢幕鏡頭、清潔與資料備份，讓手機維持穩定狀態。</p>
+ <div><span class="pill">Samsung Galaxy S24 Ultra</span><span class="pill">長期使用目標：5 年以上</span><span class="pill">繁體中文指南</span></div>
+</header>
+<section class="stats">
+ <div class="stat"><strong>20–80%</strong><span>日常可參考的電量區間，不必追求精準</span></div>
+ <div class="stat"><strong>避高溫</strong><span>電池保養最值得優先注意的事</span></div>
+ <div class="stat"><strong>定期備份</strong><span>保護照片、聯絡人與重要檔案</span></div>
+</section>
+
+<h2>01｜每日保養清單</h2>
+<div class="card">
+ <div class="progressline"><span>今日完成進度</span><strong id="count">0 / 6</strong></div>
+ <div class="progress"><div class="bar" id="bar"></div></div>
+ <div class="checklist" id="daily">
+  <label class="check"><input type="checkbox"><span>避免手機長時間處於高溫<small>不要放車內曝曬；發燙時先停止遊戲、錄影等高負載操作。</small></span></label>
+  <label class="check"><input type="checkbox"><span>依需要充電，不刻意耗到 0%<small>有方便的插座就可補電；不必等到電量很低才充。</small></span></label>
+  <label class="check"><input type="checkbox"><span>使用可靠的充電器與線材<small>選擇品質可靠、規格相容的產品；線材破損就更換。</small></span></label>
+  <label class="check"><input type="checkbox"><span>留意手機是否異常發熱<small>若在待機或一般使用時也持續異常發燙，檢查耗電 App 或送修檢測。</small></span></label>
+  <label class="check"><input type="checkbox"><span>避免螢幕長時間固定高亮度畫面<small>使用自動亮度、適度縮短螢幕逾時時間。</small></span></label>
+  <label class="check"><input type="checkbox"><span>確認重要資料有備份<small>照片、聯絡人及重要文件至少保留一份安全備份。</small></span></label>
+ </div>
+ <div class="actions"><button id="reset">重設今日清單</button><button class="secondary" onclick="window.print()">列印保養表</button></div>
+</div>
+
+<h2>02｜電池與充電策略</h2>
+<div class="grid">
+ <article class="card"><div class="tag">BATTERY</div><h3>日常怎麼充？</h3><ul><li>若方便，可把日常充電上限設在約 80%～85%。</li><li>外出、旅行或需要整天續航時，充到 100% 完全可以。</li><li>不需要刻意把電量用到 0%，也不必為了保養一直補插拔。</li><li>長期不用手機時，避免滿電或完全沒電狀態存放；放在陰涼乾燥處。</li></ul></article>
+ <article class="card"><div class="tag">SETTINGS</div><h3>開啟電池保護</h3><ol><li>打開「設定」。</li><li>進入「電池」。</li><li>選擇「電池保護」。</li><li>依系統提供的模式設定充電上限。</li></ol><p>不同 One UI 版本的選項與名稱可能略有差異，依手機實際畫面為準。</p></article>
+</div>
+<div class="notice">重點：高溫通常比偶爾充到 100% 更值得擔心。充電時若手機明顯發熱，先停止高負載使用並移到陰涼通風處自然降溫；不要放冰箱或用冰塊冷卻。</div>
+
+<h2>03｜溫度、螢幕與機身</h2>
+<div class="grid">
+ <article class="card"><h3>🌡️ 溫度管理</h3><ul><li>避免陽光直射、車內高溫及悶熱環境。</li><li>遊戲、導航、長時間錄影時留意溫度。</li><li>手機過熱時先停止高負載工作，必要時暫停充電。</li><li>不要用冰箱、冷凍庫或冷敷方式降溫。</li></ul></article>
+ <article class="card"><h3>🛡️ 螢幕保護</h3><ul><li>使用品質良好的保護貼與防摔手機殼。</li><li>避免與沙粒、鑰匙等物品混放。</li><li>避免長時間固定顯示高亮度畫面，降低烙印風險。</li><li>用乾淨柔軟的超細纖維布輕擦。</li></ul></article>
+ <article class="card"><h3>📷 相機與鏡頭</h3><ul><li>用超細纖維布清潔鏡頭表面。</li><li>避免鏡頭直接磨擦桌面或粗糙表面。</li><li>鏡頭保護貼不是必需品；品質不佳可能增加反光或影響畫質。</li></ul></article>
+ <article class="card"><h3>🔌 充電孔與防水</h3><ul><li>IP68 不代表永久防水，也不建議刻意泡水測試。</li><li>避免海水、肥皂水及清潔劑接觸手機。</li><li>充電孔潮濕或出現水分警示時，不要插線充電。</li><li>不要用針、迴紋針等金屬物清理 USB-C 孔。</li></ul></article>
+</div>
+
+<h2>04｜定期保養時間表</h2>
+<div class="card" style="padding:0;overflow:auto">
+<table><thead><tr><th>頻率</th><th>建議工作</th><th>目的</th></tr></thead><tbody>
+<tr><td>每週</td><td>檢查是否異常耗電、發熱；有需要時重新啟動</td><td>及早發現異常</td></tr>
+<tr><td>每月</td><td>清潔手機殼與機身；檢查儲存空間、線材狀況</td><td>維持整潔與使用空間</td></tr>
+<tr><td>每月</td><td>確認照片、聯絡人及重要檔案備份成功</td><td>避免資料遺失</td></tr>
+<tr><td>有更新時</td><td>查看正式系統與 App 更新內容，重要資料先備份</td><td>安全性與穩定性</td></tr>
+<tr><td>每半年</td><td>觀察電池續航變化、充電是否穩定；必要時用 Samsung Members 診斷</td><td>掌握電池狀況</td></tr>
+</tbody></table></div>
+
+<h2>05｜建議檢查的手機設定</h2>
+<div class="card">
+ <div class="checklist" id="settings">
+  <label class="check"><input type="checkbox"><span>設定 → 電池 → 電池保護<small>選擇適合日常使用的充電上限。</small></span></label>
+  <label class="check"><input type="checkbox"><span>設定 → 顯示螢幕 → 螢幕逾時<small>可考慮設定 30 秒至 1 分鐘，依使用習慣調整。</small></span></label>
+  <label class="check"><input type="checkbox"><span>設定 → 軟體更新<small>定期查看官方正式更新。</small></span></label>
+  <label class="check"><input type="checkbox"><span>Samsung Members → 支援／診斷<small>依 App 版本進行電池與硬體診斷。</small></span></label>
+  <label class="check"><input type="checkbox"><span>備份設定<small>確認 Samsung Cloud、Google 或其他備份方式可正常使用。</small></span></label>
+ </div>
+</div>
+
+<h2>06｜常見問題</h2>
+<details><summary>晚上可以整晚充電嗎？</summary><p>可以使用手機內建的電池保護功能管理充電。避免在高溫、通風不良的地方充電，並使用可靠的充電器與線材。</p></details>
+<details><summary>一定要維持 20%～80% 嗎？</summary><p>不必。這只是降低電池長時間處於極低或極高電量的一種參考方式。實際生活方便與續航需求也很重要。</p></details>
+<details><summary>手機防水，可以拿去沖洗嗎？</summary><p>不建議。防水能力會隨時間、撞擊與維修而變化；也要避免高壓水柱、熱水、海水與清潔劑。</p></details>
+<details><summary>需要常常清理記憶體或安裝清理 App 嗎？</summary><p>通常不需要。使用內建「裝置維護」檢查儲存空間與電池即可，避免安裝來路不明的清理工具。</p></details>
+<details><summary>什麼情況應該送修？</summary><p>電池膨脹、背蓋翹起、異味、充電孔損壞、反覆異常過熱、進水或螢幕異常時，停止使用並聯絡三星授權服務中心檢查。</p></details>
+
+<div class="footer">本攻略為一般日常保養建議。實際功能名稱可能因 One UI 版本、地區與設定而不同；若手機出現電池膨脹、異味或異常高溫，請停止使用並尋求專業檢查。</div>
+</main>
+<script>
+const boxes=[...document.querySelectorAll('#daily input')],count=document.getElementById('count'),bar=document.getElementById('bar');
+function update(){const n=boxes.filter(x=>x.checked).length;count.textContent=`${n} / ${boxes.length}`;bar.style.width=(n/boxes.length*100)+'%';}
+boxes.forEach(x=>x.addEventListener('change',update));
+document.getElementById('reset').addEventListener('click',()=>{boxes.forEach(x=>x.checked=false);update();});
+</script>
+</body>
+</html>
