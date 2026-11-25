@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>味蕾小館 Taste Bistro — 線上點餐系統</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      background-color: #faf8f5;
+      color: #292524;
+    }
+    /* 隱藏捲軸但保留滑動功能 */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    @keyframes popIn {
+      0% { transform: scale(0.95); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .animate-pop-in {
+      animation: popIn 0.2s ease-out forwards;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- 頂部導覽列 -->
+  <header class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-stone-200 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-3">
+      <!-- 品牌 Logo -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-amber-600 text-white flex items-center justify-center text-xl shadow-sm">
+          🍽️
+        </div>
+        <div>
+          <h1 class="text-lg sm:text-xl font-bold text-stone-900 tracking-tight leading-tight">味蕾小館 Taste Bistro</h1>
+          <p class="text-xs text-stone-500">新鮮現做・暖心手作料理</p>
+        </div>
+      </div>
+
+      <!-- 用餐模式與桌號切換 -->
+      <div class="flex items-center gap-2 bg-stone-100 p-1 rounded-xl border border-stone-200">
+        <button id="btn-dine-in" onclick="setOrderMode('dine-in')" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-bold transition-all bg-amber-600 text-white shadow-sm">
+          內用 (含10%服務費)
+        </button>
+        <button id="btn-takeout" onclick="setOrderMode('takeout')" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all text-stone-600 hover:text-stone-900">
+          外帶自取
+        </button>
+        <div id="table-selector-wrap" class="flex items-center pl-1 pr-2 border-l border-stone-300 ml-1">
+          <span class="text-xs text-stone-500 mr-1 hidden sm:inline">桌號：</span>
+          <select id="table-select" onchange="updateTable(this.value)" class="bg-transparent text-xs sm:text-sm font-bold text-amber-700 focus:outline-none cursor-pointer">
+            <option value="1號桌">1號桌</option>
+            <option value="2號桌">2號桌</option>
+            <option value="3號桌" selected>3號桌</option>
+            <option value="4號桌">4號桌</option>
+            <option value="5號桌">5號桌</option>
+            <option value="6號桌">6號桌</option>
+            <option value="7號桌">7號桌</option>
+            <option value="8號桌">8號桌</option>
+            <option value="9號桌">9號桌</option>
+            <option value="10號桌">10號桌</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分類頁籤與搜尋列 -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 border-t border-stone-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <!-- 分類 Tabs -->
+      <nav id="category-tabs" class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1 sm:pb-0">
+        <!-- 由 JS 動態生成 -->
+      </nav>
+
+      <!-- 搜尋框 -->
+      <div class="relative w-full sm:w-64 shrink-0">
+        <span class="absolute inset-y-0 left-3 flex items-center text-stone-400 text-sm">🔍</span>
+        <input
+          id="search-input"
+          type="text"
+          placeholder="搜尋餐點名稱或食材..."
+          oninput="handleSearch(this.value)"
+          class="w-full pl-9 pr-8 py-1.5 bg-stone-100 border border-transparent focus:border-amber-500 focus:bg-white rounded-full text-sm transition-all focus:outline-none"
+        />
+        <button id="clear-search-btn" onclick="clearSearch()" class="hidden absolute inset-y-0 right-2.5 flex items-center text-stone-400 hover:text-stone-600 text-xs">
+          ✕
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主要內容區 -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 pb-28 lg:pb-10 flex flex-col lg:flex-row gap-8">
+    <!-- 左側菜單列表 -->
+    <section class="flex-1 min-w-0">
+      <div class="flex items-center justify-between mb-4">
+        <h2 id="current-category-title" class="text-lg font-bold text-stone-800">全部餐點</h2>
+        <span id="item-count-badge" class="text-xs font-medium text-stone-500 bg-stone-200/70 px-2.5 py-1 rounded-full">共 12 道料理</span>
+      </div>
+
+      <!-- 餐點網格 -->
+      <div id="menu-grid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+        <!-- 由 JS 動態生成 -->
+      </div>
+
+      <!-- 無搜尋結果提示 -->
+      <div id="empty-search-state" class="hidden py-16 text-center bg-white rounded-2xl border border-stone-200/80">
+        <div class="text-4xl mb-3">🍽️</div>
+        <p class="text-stone-600 font-medium">找不到符合條件的餐點</p>
+        <p class="text-xs text-stone-400 mt-1">試試看切換其他分類或清除搜尋關鍵字</p>
+        <button onclick="resetFilters()" class="mt-4 px-4 py-2 bg-amber-600 text-white text-xs font-bold rounded-full hover:bg-amber-700 transition">
+          顯示全部餐點
+        </button>
+      </div>
+    </section>
+
+    <!-- 右側購物車 (桌面版固定側邊欄) -->
+    <aside class="hidden lg:block w-96 shrink-0">
+      <div class="sticky top-36 bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden flex flex-col max-h-[calc(100vh-10rem)]">
+        <div class="p-4 bg-stone-900 text-white flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="text-lg">🛒</span>
+            <h3 class="font-bold text-base">您的點餐清單</h3>
+          </div>
+          <span id="desktop-order-badge" class="text-xs bg-amber-500 text-stone-950 font-bold px-2.5 py-0.5 rounded-full">內用・3號桌</span>
+        </div>
+
+        <!-- 購物車內容容器 -->
+        <div id="desktop-cart-body" class="flex-1 overflow-y-auto p-4 space-y-3">
+          <!-- 由 JS 動態渲染 -->
+        </div>
+
+        <!-- 購物車底部結算區 -->
+        <div id="desktop-cart-footer" class="p-4 bg-stone-50 border-t border-stone-200">
+          <!-- 由 JS 動態渲染 -->
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- 手機與平板版：底部懸浮結帳列 -->
+  <div id="mobile-cart-bar" class="lg:hidden fixed bottom-0 inset-x-0 z-30 bg-white border-t border-stone-200 px-4 py-3 shadow-[0_-4px_20px_rgba(0,0,0,0.06)]">
+    <div class="max-w-3xl mx-auto flex items-center justify-between gap-4">
+      <button onclick="openMobileCart()" class="flex items-center gap-3 text-left">
+        <div class="relative bg-stone-900 text-white w-11 h-11 rounded-xl flex items-center justify-center text-lg">
+          🛒
+          <span id="mobile-cart-count" class="absolute -top-1.5 -right-1.5 bg-amber-500 text-stone-950 text-xs font-extrabold w-5 h-5 rounded-full flex items-center justify-center shadow">0</span>
+        </div>
+        <div>
+          <div class="text-xs text-stone-500" id="mobile-order-mode-label">內用・3號桌 (含服務費)</div>
+          <div class="text-lg font-extrabold text-stone-900" id="mobile-cart-total">NT$ 0</div>
+        </div>
+      </button>
+
+      <button id="mobile-checkout-trigger" onclick="openMobileCart()" class="px-6 py-3 rounded-xl bg-amber-600 hover:bg-amber-700 disabled:bg-stone-300 text-white font-bold text-sm transition shadow-sm">
+        查看明細
+      </button>
+    </div>
+  </div>
+
+  <!-- 手機版購物車抽屜 Modal -->
+  <div id="mobile-cart-drawer" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-stone-900/60 backdrop-blur-xs" onclick="closeMobileCart()"></div>
+    <div class="absolute inset-x-0 bottom-0 bg-white rounded-t-3xl max-h-[88vh] flex flex-col shadow-2xl animate-pop-in">
+      <div class="p-4 border-b border-stone-200 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <h3 class="font-bold text-lg text-stone-900">點餐明細</h3>
+          <span id="drawer-order-badge" class="text-xs bg-amber-100 text-amber-800 font-bold px-2.5 py-0.5 rounded-full">內用・3號桌</span>
+        </div>
+        <button onclick="closeMobileCart()" class="w-8 h-8 rounded-full bg-stone-100 text-stone-500 flex items-center justify-center hover:bg-stone-200">✕</button>
+      </div>
+      <div id="mobile-cart-body" class="flex-1 overflow-y-auto p-4 space-y-3"></div>
+      <div id="mobile-cart-footer" class="p-4 bg-stone-50 border-t border-stone-200"></div>
+    </div>
+  </div>
+
+  <!-- 餐點客製化選擇 Modal -->
+  <div id="custom-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
+    <div class="absolute inset-0 bg-stone-900/60 backdrop-blur-xs" onclick="closeCustomModal()"></div>
+    <div class="relative bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-pop-in">
+      <!-- Modal 頂部 -->
+      <div class="p-5 bg-amber-50/70 border-b border-amber-100 flex items-start justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <div id="modal-emoji" class="w-12 h-12 rounded-xl bg-white shadow-xs flex items-center justify-center text-2xl shrink-0">🥩</div>
+          <div>
+            <h3 id="modal-title" class="font-bold text-lg text-stone-900">餐點名稱</h3>
+            <p id="modal-price" class="text-sm font-bold text-amber-700">NT$ 380</p>
+          </div>
+        </div>
+        <button onclick="closeCustomModal()" class="w-8 h-8 rounded-full bg-white text-stone-500 hover:text-stone-800 flex items-center justify-center shadow-xs">✕</button>
+      </div>
+
+      <!-- Modal 規格選項區 -->
+      <div class="p-5 overflow-y-auto space-y-5 flex-1">
+        <p id="modal-desc" class="text-xs text-stone-500 leading-relaxed"></p>
+        <div id="modal-options-container" class="space-y-4">
+          <!-- 由 JS 動態生成單選/複選規格 -->
+        </div>
+
+        <!-- 單品備註 -->
+        <div>
+          <label class="block text-xs font-bold text-stone-700 mb-1.5">單品客製備註（選填）</label>
+          <input id="modal-item-note" type="text" placeholder="例如：不要香菜、醬汁分開裝..." class="w-full px-3.5 py-2 text-sm border border-stone-300 rounded-xl focus:outline-none focus:border-amber-500" />
+        </div>
+      </div>
+
+      <!-- Modal 底部數量與加入按鈕 -->
+      <div class="p-4 bg-stone-50 border-t border-stone-200 flex items-center justify-between gap-4">
+        <div class="flex items-center gap-3 bg-white border border-stone-300 rounded-xl px-2 py-1">
+          <button onclick="changeModalQty(-1)" class="w-8 h-8 rounded-lg hover:bg-stone-100 font-bold text-stone-600">−</button>
+          <span id="modal-qty" class="w-6 text-center font-bold text-sm">1</span>
+          <button onclick="changeModalQty(1)" class="w-8 h-8 rounded-lg hover:bg-stone-100 font-bold text-stone-600">+</button>
+        </div>
+
+        <button onclick="confirmAddCustomItem()" class="flex-1 py-3 px-4 bg-amber-600 hover:bg-amber-700 text-white font-bold text-sm rounded-xl shadow-sm transition flex items-center justify-between">
+          <span>加入購物車</span>
+          <span id="modal-total-btn-price">NT$ 380</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 送出訂單確認視窗 -->
+  <div id="order-success-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
+    <div class="absolute inset-0 bg-stone-900/70 backdrop-blur-xs"></div>
+    <div class="relative bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden animate-pop-in">
+      <div class="p-6 text-center bg-emerald-600 text-white">
+        <div class="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center text-3xl mx-auto mb-3">✓</div>
+        <h3 class="text-xl font-bold">訂單已成功送至廚房！</h3>
+        <p class="text-xs text-emerald-100 mt-1">廚師正在為您新鮮現做，請稍候片刻</p>
+      </div>
+
+      <div class="p-5 space-y-4">
+        <div class="flex items-center justify-between text-xs bg-stone-100 p-3 rounded-xl">
+          <div>
+            <span class="text-stone-500">取餐編號：</span>
+            <span id="receipt-order-no" class="font-extrabold text-stone-900 text-sm">#A108</span>
+          </div>
+          <div>
+            <span class="text-stone-500">用餐方式：</span>
+            <span id="receipt-mode" class="font-bold text-amber-700">內用・3號桌</span>
+          </div>
+        </div>
+
+        <div id="receipt-items" class="max-h-48 overflow-y-auto divide-y divide-stone-100 text-sm">
+          <!-- 訂單明細 -->
+        </div>
+
+        <div id="receipt-note-box" class="hidden text-xs bg-amber-50 text-amber-900 p-2.5 rounded-lg border border-amber-200">
+          <span class="font-bold">整筆備註：</span><span id="receipt-note-text"></span>
+        </div>
+
+        <div class="border-t border-stone-200 pt-3 flex items-center justify-between">
+          <span class="text-sm font-bold text-stone-600">應付總金額</span>
+          <span id="receipt-total" class="text-xl font-extrabold text-amber-600">NT$ 0</span>
+        </div>
+
+        <button onclick="closeSuccessModal()" class="w-full py-3 bg-stone-900 hover:bg-stone-800 text-white font-bold text-sm rounded-xl transition">
+          完成並繼續點餐
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast 輕提示 -->
+  <div id="toast" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-stone-900 text-white text-xs font-bold px-4 py-2.5 rounded-full shadow-lg opacity-0 pointer-events-none transition-opacity duration-200">
+    已加入購物車
+  </div>
+
+  <script>
+    // 1. 完整菜單資料庫
+    const MENU_ITEMS = [
+      {
+        id: 'm1',
+        name: '碳烤美國肋眼牛排 (8oz)',
+        category: '主食精選',
+        price: 580,
+        emoji: '🥩',
+        badge: '主廚推薦',
+        desc: '嚴選 Prime 等級肋眼，高溫直火鎖住肉汁，附季節烤時蔬與海鹽。',
+        options: [
+          {
+            name: '熟度選擇',
+            required: true,
+            choices: [
+              { label: '三分熟', extra: 0 },
+              { label: '五分熟 (推薦)', extra: 0 },
+              { label: '七分熟', extra: 0 },
+              { label: '全熟', extra: 0 }
+            ]
+          },
+          {
+            name: '醬汁選擇',
+            required: true,
+            choices: [
+              { label: '玫瑰海鹽原味', extra: 0 },
+              { label: '黑胡椒紅酒醬', extra: 0 },
+              { label: '法式蘑菇奶油醬', extra: 15 }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'm2',
+        name: '松露野菇奶油寬扁麵',
+        category: '主食精選',
+        price: 320,
+        emoji: '🍝',
+        badge: '人氣必點',
+        desc: '義大利黑松露醬拌炒綜合野菇與帕瑪森起司，香氣濃郁滑順。',
+        options: [
+          {
+            name: '辣度調整',
+            required: true,
+            choices: [
+              { label: '不辣', extra: 0 },
+              { label: '微辣', extra: 0 },
+              { label: '小辣', extra: 0 }
+            ]
+          },
+          {
+            name: '加料升級',
+            required: false,
+            choices: [
+              { label: '不需加料', extra: 0 },
+              { label: '加溫泉蛋', extra: 30 },
+              { label: '加香煎雞腿排', extra: 80 }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'm3',
+        name: '川味口水雞麻辣拌麵',
+        category: '主食精選',
+        price: 260,
+        emoji: '🍜',
+        badge: '香麻過癮',
+        desc: '舒肥嫩雞胸搭配秘製花椒紅油、花生碎與手工日曬關廟麵。',
+        options: [
+          {
+            name: '辣度選擇',
+            required: true,
+            choices: [
+              { label: '微辣', extra: 0 },
+              { label: '小辣', extra: 0 },
+              { label: '中辣', extra: 0 },
+              { label: '大辣', extra: 0 }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'm4',
+        name: '炙燒鮭魚親子丼',
+        category: '主食精選',
+        price: 360,
+        emoji: '🍣',
+        badge: '',
+        desc: '挪威生食級鮭魚腹炙燒出油脂香氣，鋪滿晶瑩鮭魚卵與越光米。',
+        options: [
+          {
+            name: '飯量調整',
+            required: true,
+            choices: [
+              { label: '正常飯量', extra: 0 },
+              { label: '少飯', extra: 0 },
+              { label: '加飯', extra: 15 }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'a1',
+        name: '松露起司脆薯',
+        category: '開胃小點',
+        price: 160,
+        emoji: '🍟',
+        badge: '桌桌必點',
+        desc: '金黃酥脆帶皮薯條，淋上黑松露美乃滋並現刨帕達諾起司。',
+        options: []
+      },
+      {
+        id: 'a2',
+        name: '水牛城辣雞翅 (6支)',
+        category: '開胃小點',
+        price: 210,
+        emoji: '🍗',
+        badge: '',
+        desc: '酥炸二節翅裹上酸辣美式水牛城醬，附清爽藍紋起司沾醬。',
+        options: [
+          {
+            name: '辣度選擇',
+            required: true,
+            choices: [
+              { label: '微辣', extra: 0 },
+              { label: '經典中辣', extra: 0 },
+              { label: '地獄大辣', extra: 0 }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'a3',
+        name: '炙燒凱撒蘿蔓沙拉',
+        category: '開胃小點',
+        price: 190,
+        emoji: '🥗',
+        badge: '清爽開胃',
+        desc: '微炙燒清脆蘿蔓心、厚切培根碎、麵包丁與自製鯷魚凱撒醬。',
+        options: []
+      },
+      {
+        id: 'd1',
+        name: '西西里檸檬氣泡咖啡',
+        category: '特調飲品',
+        price: 145,
+        emoji: '🍋',
+        badge: '招牌飲品',
+        desc: '屏東新鮮現榨綠檸檬汁融合中深焙義式濃縮與細緻氣泡水。',
+        options: [
+          {
+            name: '甜度調整',
+            required: true,
+            choices: [
+              { label: '正常甜 (黃金比例)', extra: 0 },
+              { label: '少糖', extra: 0 },
+              { label: '微糖', extra: 0 }
+            ]
+          },
+          {
+            name: '冰塊調整',
+            required: true,
+            choices: [
+              { label: '正常冰', extra: 0 },
+              { label: '少冰', extra: 0 },
+              { label: '去冰', extra: 0 }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'd2',
+        name: '宇治抹茶鮮奶拿鐵',
+        category: '特調飲品',
+        price: 150,
+        emoji: '🍵',
+        badge: '',
+        desc: '日本京都宇治丸久小山園抹茶粉手刷，搭配小農鮮乳。',
+        options: [
+          {
+            name: '溫度選擇',
+            required: true,
+            choices: [
+              { label: '冰飲 (少冰)', extra: 0 },
+              { label: '冰飲 (去冰)', extra: 0 },
+              { label: '熱飲', extra: 0 }
+            ]
+          },
+          {
+            name: '甜度調整',
+            required: true,
+            choices: [
+              { label: '微糖', extra: 0 },
+              { label: '半糖', extra: 0 },
+              { label: '無糖', extra: 0 }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'd3',
+        name: '白桃烏龍冷萃茶',
+        category: '特調飲品',
+        price: 120,
+        emoji: '🍑',
+        badge: '',
+        desc: '台灣高山烏龍冷泡 12 小時，融入天然白桃果露，清香回甘。',
+        options: [
+          {
+            name: '甜度調整',
+            required: true,
+            choices: [
+              { label: '無糖', extra: 0 },
+              { label: '微糖', extra: 0 }
+            ]
+          }
+        ]
+      },
+      {
+        id: 's1',
+        name: '焦糖海鹽巴斯克乳酪蛋糕',
+        category: '手作甜點',
+        price: 165,
+        emoji: '🍰',
+        badge: '每日限量',
+        desc: '半熟流心口感搭配微苦焦糖表層與法國給宏德海鹽，鹹甜不膩。',
+        options: []
+      },
+      {
+        id: 's2',
+        name: '大人味提拉米蘇',
+        category: '手作甜點',
+        price: 175,
+        emoji: '🍮',
+        badge: '',
+        desc: '浸泡咖啡酒的手指餅乾層疊馬斯卡彭慕斯，撒上無糖可可粉。',
+        options: []
+      }
+    ];
+
+    const CATEGORIES = ['全部餐點', '主食精選', '開胃小點', '特調飲品', '手作甜點'];
+
+    // 2. 應用程式狀態
+    let state = {
+      orderMode: 'dine-in', // 'dine-in' | 'takeout'
+      tableNumber: '3號桌',
+      selectedCategory: '全部餐點',
+      searchQuery: '',
+      cart: [], // { uid, id, name, basePrice, unitPrice, emoji, optionsSummary, itemNote, qty }
+      orderNote: '',
+      modalItem: null,
+      modalSelectedOptions: {}, // { optionName: { label, extra } }
+      modalQty: 1,
+      orderCounter: 108
+    };
+
+    // 3. 初始化頁面
+    function init() {
+      renderCategories();
+      renderMenu();
+      renderCart();
+    }
+
+    // 4. 切換內用 / 外帶與桌號
+    function setOrderMode(mode) {
+      state.orderMode = mode;
+      const btnDine = document.getElementById('btn-dine-in');
+      const btnTake = document.getElementById('btn-takeout');
+      const tableWrap = document.getElementById('table-selector-wrap');
+
+      if (mode === 'dine-in') {
+        btnDine.className = 'px-3 py-1.5 rounded-lg text-xs sm:text-sm font-bold transition-all bg-amber-600 text-white shadow-sm';
+        btnTake.className = 'px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all text-stone-600 hover:text-stone-900';
+        tableWrap.classList.remove('hidden');
+      } else {
+        btnTake.className = 'px-3 py-1.5 rounded-lg text-xs sm:text-sm font-bold transition-all bg-amber-600 text-white shadow-sm';
+        btnDine.className = 'px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all text-stone-600 hover:text-stone-900';
+        tableWrap.classList.add('hidden');
+      }
+      renderCart();
+    }
+
+    function updateTable(val) {
+      state.tableNumber = val;
+      renderCart();
+    }
+
+    // 5. 分類與搜尋渲染
+    function renderCategories() {
+      const container = document.getElementById('category-tabs');
+      container.innerHTML = CATEGORIES.map(cat => {
+        const active = state.selectedCategory === cat;
+        return `
+          <button
+            onclick="selectCategory('${cat}')"
+            class="px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-bold whitespace-nowrap transition-all ${
+              active
+                ? 'bg-stone-900 text-white shadow-xs'
+                : 'bg-stone-100 text-stone-600 hover:bg-stone-200'
+            }"
+          >
+            ${cat}
+          </button>
+        `;
+      }).join('');
+    }
+
+    function selectCategory(cat) {
+      state.selectedCategory = cat;
+      document.getElementById('current-category-title').textContent = cat;
+      renderCategories();
+      renderMenu();
+    }
+
+    function handleSearch(val) {
+      state.searchQuery = val.trim().toLowerCase();
+      const clearBtn = document.getElementById('clear-search-btn');
+      if (state.searchQuery) {
+        clearBtn.classList.remove('hidden');
+      } else {
+        clearBtn.classList.add('hidden');
+      }
+      renderMenu();
+    }
+
+    function clearSearch() {
+      document.getElementById('search-input').value = '';
+      handleSearch('');
+    }
+
+    function resetFilters() {
+      state.selectedCategory = '全部餐點';
+      document.getElementById('current-category-title').textContent = '全部餐點';
+      clearSearch();
+      renderCategories();
+      renderMenu();
+    }
+
+    // 6. 渲染菜單卡片
+    function renderMenu() {
+      const filtered = MENU_ITEMS.filter(item => {
+        const matchCat = state.selectedCategory === '全部餐點' || item.category === state.selectedCategory;
+        const matchSearch =
+          !state.searchQuery ||
+          item.name.toLowerCase().includes(state.searchQuery) ||
+          item.desc.toLowerCase().includes(state.searchQuery);
+        return matchCat && matchSearch;
+      });
+
+      const grid = document.getElementById('menu-grid');
+      const emptyState = document.getElementById('empty-search-state');
+      const badge = document.getElementById('item-count-badge');
+
+      badge.textContent = `共 ${filtered.length} 道料理`;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+      grid.innerHTML = filtered.map(item => {
+        const hasOptions = item.options && item.options.length > 0;
+        const inCartQty = state.cart
+          .filter(c => c.id === item.id)
+          .reduce((sum, c) => sum + c.qty, 0);
+
+        return `
+          <div class="bg-white rounded-2xl border border-stone-200/90 p-4 flex flex-col justify-between hover:border-amber-400 hover:shadow-md transition-all group">
+            <div>
+              <div class="flex items-start justify-between gap-3 mb-2.5">
+                <div class="w-12 h-12 rounded-xl bg-amber-50 border border-amber-100 flex items-center justify-center text-2xl group-hover:scale-105 transition-transform">
+                  ${item.emoji}
+                </div>
+                <div class="flex items-center gap-1.5">
+                  ${item.badge ? `<span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800">${item.badge}</span>` : ''}
+                  ${inCartQty > 0 ? `<span class="text-[11px] font-extrabold px-2 py-0.5 rounded-full bg-stone-900 text-white">已點 ${inCartQty}</span>` : ''}
+                </div>
+              </div>
+
+              <h3 class="font-bold text-stone-900 text-base leading-snug mb-1">${item.name}</h3>
+              <p class="text-xs text-stone-500 line-clamp-2 leading-relaxed mb-4">${item.desc}</p>
+            </div>
+
+            <div class="pt-3 border-t border-stone-100 flex items-center justify-between">
+              <span class="font-extrabold text-amber-700 text-base">NT$ ${item.price}</span>
+              <button
+                onclick="handleMenuItemClick('${item.id}')"
+                class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1 ${
+                  hasOptions
+                    ? 'bg-amber-50 text-amber-800 border border-amber-300 hover:bg-amber-600 hover:text-white hover:border-amber-600'
+                    : 'bg-stone-900 text-white hover:bg-amber-600'
+                }"
+              >
+                <span>${hasOptions ? '選規格' : '+ 加入'}</span>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // 7. 點擊餐點（有規格彈出視窗，無規格直接加入）
+    function handleMenuItemClick(itemId) {
+      const item = MENU_ITEMS.find(m => m.id === itemId);
+      if (!item) return;
+
+      if (item.options && item.options.length > 0) {
+        openCustomModal(item);
+      } else {
+        addToCart({
+          id: item.id,
+          name: item.name,
+          basePrice: item.price,
+          unitPrice: item.price,
+          emoji: item.emoji,
+          optionsSummary: '',
+          itemNote: '',
+          qty: 1
+        });
+        showToast(`已將「${item.name}」加入購物車`);
+      }
+    }
+
+    // 8. 客製化規格 Modal 邏輯
+    function openCustomModal(item) {
+      state.modalItem = item;
+      state.modalQty = 1;
+      state.modalSelectedOptions = {};
+
+      // 預設選取每個規格的第一個選項
+      item.options.forEach(opt => {
+        if (opt.choices && opt.choices.length > 0) {
+          state.modalSelectedOptions[opt.name] = opt.choices[0];
+        }
+      });
+
+      document.getElementById('modal-emoji').textContent = item.emoji;
+      document.getElementById('modal-title').textContent = item.name;
+      document.getElementById('modal-price').textContent = `NT$ ${item.price}`;
+      document.getElementById('modal-desc').textContent = item.desc;
+      document.getElementById('modal-item-note').value = '';
+      document.getElementById('modal-qty').textContent = '1';
+
+      renderModalOptions();
+      updateModalTotalPrice();
+
+      const modal = document.getElementById('custom-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeCustomModal() {
+      const modal = document.getElementById('custom-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      state.modalItem = null;
+    }
+
+    function renderModalOptions() {
+      const container = document.getElementById('modal-options-container');
+      const item = state.modalItem;
+      if (!item) return;
+
+      container.innerHTML = item.options.map(opt => {
+        const selected = state.modalSelectedOptions[opt.name];
+        return `
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold text-stone-800">${opt.name}</span>
+              <span class="text-[11px] px-2 py-0.5 rounded bg-stone-100 text-stone-500">${opt.required ? '必選' : '選填'}</span>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              ${opt.choices.map((choice, idx) => {
+                const isSelected = selected && selected.label === choice.label;
+                return `
+                  <button
+                    type="button"
+                    onclick="selectModalOption('${opt.name}', ${idx})"
+                    class="px-3 py-2 rounded-xl border text-left text-xs transition flex items-center justify-between ${
+                      isSelected
+                        ? 'border-amber-600 bg-amber-50 text-amber-900 font-bold ring-1 ring-amber-600'
+                        : 'border-stone-200 bg-white text-stone-700 hover:border-stone-300'
+                    }"
+                  >
+                    <span>${choice.label}</span>
+                    ${choice.extra > 0 ? `<span class="text-[11px] text-amber-700 font-bold">+NT$${choice.extra}</span>` : ''}
+                  </button>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function selectModalOption(optionName, choiceIdx) {
+      const opt = state.modalItem.options.find(o => o.name === optionName);
+      if (!opt) return;
+      state.modalSelectedOptions[optionName] = opt.choices[choiceIdx];
+      renderModalOptions();
+      updateModalTotalPrice();
+    }
+
+    function changeModalQty(delta) {
+      const next = state.modalQty + delta;
+      if (next < 1) return;
+      state.modalQty = next;
+      document.getElementById('modal-qty').textContent = String(next);
+      updateModalTotalPrice();
+    }
+
+    function getModalUnitPrice() {
+      if (!state.modalItem) return 0;
+      let extraTotal = 0;
+      Object.values(state.modalSelectedOptions).forEach(choice => {
+        extraTotal += choice.extra || 0;
+      });
+      return state.modalItem.price + extraTotal;
+    }
+
+    function updateModalTotalPrice() {
+      const total = getModalUnitPrice() * state.modalQty;
+      document.getElementById('modal-total-btn-price').textContent = `NT$ ${total}`;
+    }
+
+    function confirmAddCustomItem() {
+      const item = state.modalItem;
+      if (!item) return;
+
+      const optionsList = Object.values(state.modalSelectedOptions).map(c => c.label);
+      const optionsSummary = optionsList.join(' / ');
+      const itemNote = document.getElementById('modal-item-note').value.trim();
+      const unitPrice = getModalUnitPrice();
+
+      addToCart({
+        id: item.id,
+        name: item.name,
+        basePrice: item.price,
+        unitPrice,
+        emoji: item.emoji,
+        optionsSummary,
+        itemNote,
+        qty: state.modalQty
+      });
+
+      closeCustomModal();
+      showToast(`已將「${item.name}」加入購物車`);
+    }
+
+    // 9. 購物車增刪改與同規格合併
+    function addToCart(newItem) {
+      const uid = `${newItem.id}__${newItem.optionsSummary}__${newItem.itemNote}`;
+      const existing = state.cart.find(c => c.uid === uid);
+
+      if (existing) {
+        existing.qty += newItem.qty;
+      } else {
+        state.cart.push({ ...newItem, uid });
+      }
+
+      renderMenu();
+      renderCart();
+    }
+
+    function updateCartItemQty(uid, delta) {
+      const idx = state.cart.findIndex(c => c.uid === uid);
+      if (idx === -1) return;
+
+      state.cart[idx].qty += delta;
+      if (state.cart[idx].qty <= 0) {
+        state.cart.splice(idx, 1);
+      }
+
+      renderMenu();
+      renderCart();
+    }
+
+    function clearCart() {
+      state.cart = [];
+      state.orderNote = '';
+      renderMenu();
+      renderCart();
+    }
+
+    function updateOrderNote(val) {
+      state.orderNote = val;
+    }
+
+    // 10. 計算金額（小計、10%服務費、總計）
+    function calculateTotals() {
+      const subtotal = state.cart.reduce((sum, item) => sum + item.unitPrice * item.qty, 0);
+      const serviceFee = state.orderMode === 'dine-in' ? Math.round(subtotal * 0.1) : 0;
+      const total = subtotal + serviceFee;
+      const totalCount = state.cart.reduce((sum, item) => sum + item.qty, 0);
+      return { subtotal, serviceFee, total, totalCount };
+    }
+
+    // 11. 渲染購物車（同步更新桌面版側邊欄與手機版抽屜）
+    function renderCart() {
+      const { subtotal, serviceFee, total, totalCount } = calculateTotals();
+      const modeText = state.orderMode === 'dine-in' ? `內用・${state.tableNumber}` : '外帶自取';
+
+      // 更新標籤
+      document.getElementById('desktop-order-badge').textContent = modeText;
+      document.getElementById('drawer-order-badge').textContent = modeText;
+      document.getElementById('mobile-order-mode-label').textContent =
+        state.orderMode === 'dine-in' ? `${modeText} (含10%服務費)` : `${modeText} (免服務費)`;
+      document.getElementById('mobile-cart-count').textContent = totalCount;
+      document.getElementById('mobile-cart-total').textContent = `NT$ ${total}`;
+
+      const bodyHTML =
+        state.cart.length === 0
+          ? `
+            <div class="py-12 text-center text-stone-400">
+              <div class="text-3xl mb-2">🧾</div>
+              <p class="text-sm font-medium text-stone-500">購物車目前是空的</p>
+              <p class="text-xs mt-1">從左側菜單挑選喜歡的料理吧！</p>
+            </div>
+          `
+          : `
+            <div class="flex items-center justify-between pb-1">
+              <span class="text-xs font-bold text-stone-500">已選 ${totalCount} 份餐點</span>
+              <button onclick="clearCart()" class="text-xs text-rose-600 hover:underline">清空全部</button>
+            </div>
+            ${state.cart
+              .map(
+                item => `
+              <div class="p-3 rounded-xl bg-stone-50 border border-stone-200/80 flex items-start justify-between gap-2">
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-1.5">
+                    <span>${item.emoji}</span>
+                    <h4 class="font-bold text-sm text-stone-900 truncate">${item.name}</h4>
+                  </div>
+                  ${item.optionsSummary ? `<p class="text-[11px] text-stone-500 mt-0.5">${item.optionsSummary}</p>` : ''}
+                  ${item.itemNote ? `<p class="text-[11px] text-amber-700 mt-0.5">備註：${item.itemNote}</p>` : ''}
+                  <div class="text-xs font-bold text-stone-700 mt-1.5">NT$ ${item.unitPrice * item.qty}</div>
+                </div>
+
+                <div class="flex items-center gap-1.5 bg-white border border-stone-200 rounded-lg px-1.5 py-1 shrink-0">
+                  <button onclick="updateCartItemQty('${item.uid}', -1)" class="w-6 h-6 rounded hover:bg-stone-100 text-stone-600 font-bold text-xs">−</button>
+                  <span class="w-5 text-center text-xs font-bold">${item.qty}</span>
+                  <button onclick="updateCartItemQty('${item.uid}', 1)" class="w-6 h-6 rounded hover:bg-stone-100 text-stone-600 font-bold text-xs">+</button>
+                </div>
+              </div>
+            `
+              )
+              .join('')}
+            <div class="pt-2">
+              <label class="block text-xs font-bold text-stone-600 mb-1">整筆訂單備註</label>
+              <input
+                type="text"
+                value="${state.orderNote.replace(/"/g, '&quot;')}"
+                oninput="updateOrderNote(this.value)"
+                placeholder="例如：餐具需要兩份、甜點餐後上..."
+                class="w-full px-3 py-2 text-xs bg-white border border-stone-300 rounded-xl focus:outline-none focus:border-amber-500"
+              />
+            </div>
+          `;
+
+      const footerHTML = `
+        <div class="space-y-1.5 text-xs mb-3">
+          <div class="flex justify-between text-stone-500">
+            <span>餐點小計</span>
+            <span>NT$ ${subtotal}</span>
+          </div>
+          <div class="flex justify-between text-stone-500">
+            <span>內用服務費 (10%)</span>
+            <span>${state.orderMode === 'dine-in' ? `NT$ ${serviceFee}` : '免收 (外帶)'}</span>
+          </div>
+          <div class="flex justify-between text-base font-extrabold text-stone-900 pt-2 border-t border-stone-200">
+            <span>總計金額</span>
+            <span class="text-amber-600">NT$ ${total}</span>
+          </div>
+        </div>
+        <button
+          onclick="submitOrder()"
+          ${state.cart.length === 0 ? 'disabled' : ''}
+          class="w-full py-3 rounded-xl bg-amber-600 hover:bg-amber-700 disabled:bg-stone-300 disabled:cursor-not-allowed text-white font-bold text-sm shadow-sm transition"
+        >
+          送出訂單至廚房
+        </button>
+      `;
+
+      document.getElementById('desktop-cart-body').innerHTML = bodyHTML;
+      document.getElementById('desktop-cart-footer').innerHTML = footerHTML;
+      document.getElementById('mobile-cart-body').innerHTML = bodyHTML;
+      document.getElementById('mobile-cart-footer').innerHTML = footerHTML;
+    }
+
+    // 12. 手機版抽屜開關
+    function openMobileCart() {
+      document.getElementById('mobile-cart-drawer').classList.remove('hidden');
+    }
+
+    function closeMobileCart() {
+      document.getElementById('mobile-cart-drawer').classList.add('hidden');
+    }
+
+    // 13. 送出訂單
+    function submitOrder() {
+      if (state.cart.length === 0) return;
+
+      closeMobileCart();
+      const { total } = calculateTotals();
+      const modeText = state.orderMode === 'dine-in' ? `內用・${state.tableNumber}` : '外帶自取';
+
+      document.getElementById('receipt-order-no').textContent = `#A${state.orderCounter++}`;
+      document.getElementById('receipt-mode').textContent = modeText;
+      document.getElementById('receipt-total').textContent = `NT$ ${total}`;
+
+      document.getElementById('receipt-items').innerHTML = state.cart
+        .map(
+          item => `
+        <div class="py-2 flex items-start justify-between gap-2">
+          <div>
+            <div class="font-bold text-stone-800">${item.name} × ${item.qty}</div>
+            ${item.optionsSummary ? `<div class="text-xs text-stone-500">${item.optionsSummary}</div>` : ''}
+            ${item.itemNote ? `<div class="text-xs text-amber-700">備註：${item.itemNote}</div>` : ''}
+          </div>
+          <div class="font-bold text-stone-700 shrink-0">NT$ ${item.unitPrice * item.qty}</div>
+        </div>
+      `
+        )
+        .join('');
+
+      const noteBox = document.getElementById('receipt-note-box');
+      if (state.orderNote.trim()) {
+        document.getElementById('receipt-note-text').textContent = state.orderNote.trim();
+        noteBox.classList.remove('hidden');
+      } else {
+        noteBox.classList.add('hidden');
+      }
+
+      const modal = document.getElementById('order-success-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeSuccessModal() {
+      const modal = document.getElementById('order-success-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      clearCart();
+    }
+
+    // 14. Toast 提示
+    let toastTimer = null;
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.classList.remove('opacity-0');
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.add('opacity-0');
+      }, 1800);
+    }
+
+    // 啟動初始化
+    init();
+  </script>
+</body>
+</html>
