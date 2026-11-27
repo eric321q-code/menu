@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>n8n 自動化接案創業攻略｜實戰手冊與互動試算</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --surface: #1e293b;
+      --surface-2: #273549;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --border: #334155;
+      --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.14);
+      --success: #34d399;
+      --warning: #fbbf24;
+      --danger: #f87171;
+      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.35);
+    }
+
+    body.light {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface-2: #f1f5f9;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: #e2e8f0;
+      --accent: #0284c7;
+      --accent-soft: rgba(2, 132, 199, 0.1);
+      --success: #059669;
+      --warning: #d97706;
+      --danger: #dc2626;
+      --shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      transition: background-color 0.25s ease, color 0.25s ease;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0.9rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      font-weight: 700;
+      font-size: 1.05rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .brand-badge {
+      font-size: 0.72rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+    }
+
+    nav {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    nav a {
+      font-size: 0.88rem;
+      color: var(--muted);
+      padding: 0.35rem 0.65rem;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+    }
+
+    nav a:hover {
+      color: var(--text);
+      background: var(--surface-2);
+    }
+
+    .btn {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      padding: 0.45rem 0.8rem;
+      border-radius: 8px;
+      font-size: 0.86rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .btn:hover {
+      background: var(--surface-2);
+      border-color: var(--accent);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #ffffff;
+      border-color: var(--accent);
+      font-weight: 600;
+    }
+
+    .btn-primary:hover {
+      opacity: 0.92;
+      background: var(--accent);
+    }
+
+    main {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 4rem;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 2.2rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 2.5rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(1.65rem, 3.2vw, 2.4rem);
+      line-height: 1.25;
+      margin-bottom: 0.85rem;
+    }
+
+    .hero p {
+      color: var(--muted);
+      max-width: 780px;
+      font-size: 1rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.9rem;
+    }
+
+    .stat-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.9rem 1rem;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .stat-value {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-top: 0.2rem;
+    }
+
+    section {
+      margin-bottom: 3rem;
+      scroll-margin-top: 76px;
+    }
+
+    .section-head {
+      margin-bottom: 1.2rem;
+    }
+
+    .section-head h2 {
+      font-size: 1.45rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .section-head p {
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.15rem;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.35rem;
+      box-shadow: var(--shadow);
+    }
+
+    .card h3 {
+      font-size: 1.08rem;
+      margin-bottom: 0.55rem;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .card p, .card li {
+      color: var(--muted);
+      font-size: 0.93rem;
+    }
+
+    .card ul {
+      padding-left: 1.15rem;
+      margin-top: 0.5rem;
+    }
+
+    .card li {
+      margin-bottom: 0.35rem;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 640px;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 0.9rem 1rem;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.92rem;
+      vertical-align: top;
+    }
+
+    th {
+      background: var(--surface-2);
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    td {
+      color: var(--muted);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .tag {
+      display: inline-block;
+      font-size: 0.76rem;
+      font-weight: 600;
+      padding: 0.15rem 0.55rem;
+      border-radius: 999px;
+      margin-bottom: 0.25rem;
+    }
+
+    .tag-ok {
+      background: rgba(52, 211, 153, 0.15);
+      color: var(--success);
+    }
+
+    .tag-warn {
+      background: rgba(251, 191, 36, 0.15);
+      color: var(--warning);
+    }
+
+    .tag-info {
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    /* 5-Stage Interactive Roadmap */
+    .progress-bar-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem 1.2rem;
+      margin-bottom: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .progress-track {
+      flex: 1;
+      min-width: 180px;
+      height: 10px;
+      background: var(--surface-2);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent), var(--success));
+      transition: width 0.3s ease;
+    }
+
+    .step-tabs {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 0.65rem;
+      margin-bottom: 1rem;
+    }
+
+    .step-tab {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.75rem 0.9rem;
+      text-align: left;
+      cursor: pointer;
+      color: var(--text);
+      font-family: inherit;
+      transition: all 0.2s ease;
+    }
+
+    .step-tab:hover {
+      border-color: var(--accent);
+    }
+
+    .step-tab.active {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+    }
+
+    .step-tab .step-num {
+      font-size: 0.75rem;
+      color: var(--accent);
+      font-weight: 700;
+      display: block;
+    }
+
+    .step-tab .step-title-sm {
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: block;
+      margin-top: 0.15rem;
+    }
+
+    .step-detail {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+    }
+
+    .step-detail-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.85rem;
+    }
+
+    .subtitle-pill {
+      font-size: 0.82rem;
+      color: var(--warning);
+      background: rgba(251, 191, 36, 0.12);
+      border: 1px solid rgba(251, 191, 36, 0.3);
+      padding: 0.25rem 0.65rem;
+      border-radius: 8px;
+      display: inline-block;
+      margin-bottom: 0.5rem;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.7rem;
+      padding: 0.85rem 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 0.75rem;
+      cursor: pointer;
+    }
+
+    .check-item input[type="checkbox"] {
+      margin-top: 0.25rem;
+      width: 17px;
+      height: 17px;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+
+    .check-item strong {
+      display: block;
+      font-size: 0.96rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .check-item span {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    /* Calculator */
+    .calc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .field {
+      margin-bottom: 1rem;
+    }
+
+    .field label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 0.35rem;
+    }
+
+    .field input[type="range"],
+    .field select {
+      width: 100%;
+    }
+
+    .field select {
+      padding: 0.55rem 0.7rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.92rem;
+    }
+
+    .result-box {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.1rem;
+      margin-top: 0.6rem;
+    }
+
+    .result-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.45rem 0;
+      border-bottom: 1px dashed var(--border);
+      font-size: 0.93rem;
+    }
+
+    .result-row:last-child {
+      border-bottom: none;
+    }
+
+    .result-highlight {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--success);
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.8rem 1.25rem;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    @media (max-width: 640px) {
+      .hero {
+        padding: 1.4rem;
+      }
+      .step-detail {
+        padding: 1.15rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav-inner">
+      <div class="brand">
+        <span>n8n 接案創業攻略</span>
+        <span class="brand-badge">實戰互動版</span>
+      </div>
+      <nav aria-label="主導覽">
+        <a href="#business">商業模式</a>
+        <a href="#licensing">授權合規</a>
+        <a href="#roadmap">五階段路線</a>
+        <a href="#pitfalls">避坑指南</a>
+        <a href="#calculator">估價試算</a>
+      </nav>
+      <button class="btn" id="themeToggle" type="button" aria-label="切換深淺色主題">切換主題</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>用 n8n 打造高毛利自動化接案與創業體系</h1>
+      <p>
+        n8n 的核心優勢在於自架成本可控、原生支援 AI Agent 工作流，且能兼顧內部營運與多系統整合。
+        接案與創業能否走穩，關鍵不在「會串多少節點」，而在<strong>賣商業結果</strong>、<strong>守住授權紅線</strong>，並建立可複製的交付與維運流程。
+      </p>
+      <div class="hero-stats">
+        <div class="stat-box">
+          <div class="stat-label">核心變現邏輯</div>
+          <div class="stat-value">單次建置 + 月費維運</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">核心競爭優勢</div>
+          <div class="stat-value">AI Agent + 自架彈性</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">交付關鍵標準</div>
+          <div class="stat-value">防呆驗證 + 錯誤告警</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">進度保存機制</div>
+          <div class="stat-value">本機自動記憶勾選</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="business">
+      <div class="section-head">
+        <h2>一、 商業模式與定價策略</h2>
+        <p>客戶買單的是省下的工時、降低的錯誤率或提升的轉換率，建議以「導入費＋維運費」組合設計。</p>
+      </div>
+      <div class="grid-3">
+        <div class="card">
+          <h3>💼 單次專案建置（Setup Fee）</h3>
+          <p>針對明確業務痛點報價，將常見需求產品化，客製化串接則依複雜度與測試工時估價。</p>
+          <ul>
+            <li>自動對帳、新客名單分流、表單自動建檔</li>
+            <li>LINE 官方帳號與 CRM 串接</li>
+            <li>AI 客服回覆草稿或內部知識庫問答</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>🔄 月費維運與監控（Monthly Retainer）</h3>
+          <p>外部 API 欄位變動、Token 額度調整與主機更新都會影響穩定度，維運是穩定現金流的核心。</p>
+          <ul>
+            <li>流程失敗即時告警與異常排查</li>
+            <li>工作流版本備份與安全更新</li>
+            <li>依業務成長微調節點與 Prompt</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>🎯 台灣中小企業高價值場景</h3>
+          <p>優先挑「每天都在做、規則清楚、出錯成本高」的流程切入，最容易算出投資報酬率。</p>
+          <ul>
+            <li><strong>客服與名單：</strong>意圖分類、寫入 CRM、產出草稿待審</li>
+            <li><strong>營運摘要：</strong>定時彙整報表或會議重點推播至群組</li>
+            <li><strong>資料歸檔：</strong>跨平台搬運附件、訂單與對帳明細</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="licensing">
+      <div class="section-head">
+        <h2>二、 授權合規與部署紅線</h2>
+        <p>接案與創業前先釐清部署與授權邊界，避免後續商業模式受限或產生合規風險。</p>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 24%;">模式／做法</th>
+              <th style="width: 34%;">適用情境</th>
+              <th style="width: 42%;">注意事項</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <span class="tag tag-ok">建議做法</span><br />
+                <strong>客戶自架或企業內部使用</strong>
+              </td>
+              <td>幫客戶部署在其自有主機或雲端帳號，供客戶內部營運使用。</td>
+              <td>符合內部／個人使用情境，且須保留原始授權與著作權聲明。</td>
+            </tr>
+            <tr>
+              <td>
+                <span class="tag tag-warn">高風險紅線</span><br />
+                <strong>自架版收費代管／白標轉售</strong>
+              </td>
+              <td>替外部客戶代管 n8n 實例並收使用費，或改品牌名稱對外販售。</td>
+              <td>涉及商業代管或白標轉售時，需留意商業授權與計費條款，避免踩線。</td>
+            </tr>
+            <tr>
+              <td>
+                <span class="tag tag-info">架構抉擇</span><br />
+                <strong>自架 vs. 雲端託管</strong>
+              </td>
+              <td>重視資料隱私或執行量較高可選自架；想減少維運負擔可評估雲端方案。</td>
+              <td>自架需自行負責備份、安全更新與主機穩定度；雲端則需留意執行次數上限。</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="roadmap">
+      <div class="section-head">
+        <h2>三、 從零到接案的 5 階段落地路線</h2>
+        <p>點選各階段查看實戰重點，並勾選完成狀態（自動儲存於瀏覽器）。</p>
+      </div>
+
+      <div class="progress-bar-wrap">
+        <div>
+          <strong>落地進度：</strong>
+          <span id="progressText">0 / 5 階段已完成（0%）</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <button class="btn" id="resetProgressBtn" type="button">重設進度</button>
+      </div>
+
+      <div class="step-tabs" id="stepTabs"></div>
+      <div class="step-detail" id="stepDetail"></div>
+    </section>
+
+    <section id="pitfalls">
+      <div class="section-head">
+        <h2>四、 接案實務避坑提醒與上線自檢</h2>
+        <p>交付前逐項確認，能大幅減少上線初期的客訴與免費返工。</p>
+      </div>
+
+      <label class="check-item">
+        <input type="checkbox" class="pitfall-check" data-key="pitfall_data" />
+        <div>
+          <strong>先驗收資料品質，再接 AI 節點</strong>
+          <span>若原始表單、試算表或文件格式混亂，直接接大模型只會放大錯誤。先做欄位清理與防呆判斷，再交由 AI 分類或生成。</span>
+        </div>
+      </label>
+
+      <label class="check-item">
+        <input type="checkbox" class="pitfall-check" data-key="pitfall_api" />
+        <div>
+          <strong>注意第三方 API 限制與變動</strong>
+          <span>外部平台（例如通訊軟體、社群或金流 API）常有速率限制或介面調整；實作前先確認權限申請條件、重試策略與替代方案。</span>
+        </div>
+      </label>
+
+      <label class="check-item">
+        <input type="checkbox" class="pitfall-check" data-key="pitfall_privacy" />
+        <div>
+          <strong>客戶資料隱私與權限隔離</strong>
+          <span>處理客戶個資、訂單或內部文件時，避免將敏感資料隨意傳送至未確認隱私政策的外部服務，並做好測試環境與正式環境分離。</span>
+        </div>
+      </label>
+    </section>
+
+    <section id="calculator">
+      <div class="section-head">
+        <h2>五、 接案估價與客戶回本試算器</h2>
+        <p>快速估算專案建議報價區間，並幫客戶算出每月省下的工時價值。</p>
+      </div>
+
+      <div class="calc-grid">
+        <div class="card">
+          <h3>🧮 專案報價試算參數</h3>
+          <div class="field">
+            <label for="workflowCount">串接核心流程數量：<span id="workflowCountVal">2</span> 條</label>
+            <input type="range" id="workflowCount" min="1" max="8" value="2" />
+          </div>
+          <div class="field">
+            <label for="aiComplexity">AI 節點複雜度</label>
+            <select id="aiComplexity">
+              <option value="0">無 AI（純規則／API 串接）</option>
+              <option value="12000" selected>中階（分類／摘要／草稿生成）</option>
+              <option value="28000">高階（多工具 Agent／知識庫檢索＋人工審核）</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="retainerPlan">月費維運方案</label>
+            <select id="retainerPlan">
+              <option value="0">不含月費（僅交付與保固交接）</option>
+              <option value="3500" selected>基礎監控與備份（NT$ 3,500 / 月）</option>
+              <option value="8000">進階維運與持續優化（NT$ 8,000 / 月）</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>📊 報價與客戶效益估算</h3>
+          <div class="field">
+            <label for="savedHours">客戶每月可省工時：<span id="savedHoursVal">25</span> 小時</label>
+            <input type="range" id="savedHours" min="5" max="120" step="5" value="25" />
+          </div>
+          <div class="field">
+            <label for="hourlyCost">客戶平均人力時薪：<span id="hourlyCostVal">400</span> 元</label>
+            <input type="range" id="hourlyCost" min="200" max="1500" step="50" value="400" />
+          </div>
+
+          <div class="result-box">
+            <div class="result-row">
+              <span>建議單次建置費參考</span>
+              <strong id="setupQuote">NT$ 34,000</strong>
+            </div>
+            <div class="result-row">
+              <span>建議月費維運</span>
+              <strong id="monthlyQuote">NT$ 3,500 / 月</strong>
+            </div>
+            <div class="result-row">
+              <span>客戶每月預估省下人力價值</span>
+              <strong id="monthlySavings">NT$ 10,000 / 月</strong>
+            </div>
+            <div class="result-row">
+              <span>預估回本週期（以建置費計）</span>
+              <span class="result-highlight" id="paybackMonths">約 3.4 個月</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    n8n 自動化接案創業攻略｜可離線開啟的單檔 HTML 實戰手冊
+  </footer>
+
+  <script>
+    const stepsData = [
+      {
+        num: "階段 01",
+        title: "選定利基痛點與代表作",
+        subtitle: "先做 2–3 套可展示的完整流程",
+        desc: "挑出最容易算得出時間或金錢回報的流程，例如「潛在客戶自動建檔與通知」或「客服信件分類與草稿生成」。每個案例都要保留測試紀錄、前後對比與清楚的流程說明。",
+        action: "產出檢核：至少完成 2 支 1–2 分鐘的操作展示影片與前後工時對比數據。"
+      },
+      {
+        num: "階段 02",
+        title: "建立生產級工作流規範",
+        subtitle: "避免只停留在「能跑通」的原型",
+        desc: "落實模組化拆解、輸入資料驗證、重試機制與錯誤通知流程；敏感金鑰統一放在 Credentials 管理，並用註解標示關鍵邏輯，方便後續交接與除錯。",
+        action: "產出檢核：每條正式工作流皆具備 Error Trigger 告警與空值／格式防呆節點。"
+      },
+      {
+        num: "階段 03",
+        title: "包裝清楚的接案方案",
+        subtitle: "把技術細節轉成商業承諾",
+        desc: "將服務拆成「單次導入」與「月度維運」兩段，明確寫出交付物、串接系統清單、驗收標準與不含在內的變更範圍，降低需求無限擴張的風險。",
+        action: "產出檢核：備妥標準報價單範本，清楚列明驗收測試案例與變更追加規則。"
+      },
+      {
+        num: "階段 04",
+        title: "用實戰案例開發首批客戶",
+        subtitle: "從既有的人脈、社群與中小企業切入",
+        desc: "主動盤點身邊店家、電商賣家、顧問或內容創作者最花時間的手動流程，錄製 1–2 分鐘展示影片或提供免費流程健檢，用具體省時效益促成首單。",
+        action: "產出檢核：每週完成至少 5 次流程健檢或 Demo 邀約，聚焦高頻重複作業。"
+      },
+      {
+        num: "階段 05",
+        title: "標準化交付與維運 SOP",
+        subtitle: "讓接案從勞力密集走向可複製",
+        desc: "建立環境部署清單、權限交接表、異常排查手冊與備份排程。客戶上線後定期回報執行狀況與優化建議，提高續約與轉介率。",
+        action: "產出檢核：建立客戶交接資料夾（工作流 JSON、架構說明、維運聯絡窗口）。"
+      }
+    ];
+
+    const STORAGE_KEY_STEPS = "n8n_playbook_completed_steps_v1";
+    const STORAGE_KEY_PITFALLS = "n8n_playbook_pitfalls_v1";
+    const STORAGE_KEY_THEME = "n8n_playbook_theme_v1";
+
+    let activeStepIndex = 0;
+    let completedSteps = JSON.parse(localStorage.getItem(STORAGE_KEY_STEPS) || "[]");
+
+    const stepTabsEl = document.getElementById("stepTabs");
+    const stepDetailEl = document.getElementById("stepDetail");
+    const progressTextEl = document.getElementById("progressText");
+    const progressFillEl = document.getElementById("progressFill");
+    const resetProgressBtn = document.getElementById("resetProgressBtn");
+
+    function saveSteps() {
+      localStorage.setItem(STORAGE_KEY_STEPS, JSON.stringify(completedSteps));
+    }
+
+    function updateProgressUI() {
+      const count = completedSteps.length;
+      const total = stepsData.length;
+      const pct = Math.round((count / total) * 100);
+      progressTextEl.textContent = `${count} / ${total} 階段已完成（${pct}%）`;
+      progressFillEl.style.width = `${pct}%`;
+    }
+
+    function renderSteps() {
+      stepTabsEl.innerHTML = "";
+      stepsData.forEach((step, idx) => {
+        const isDone = completedSteps.includes(idx);
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = `step-tab ${idx === activeStepIndex ? "active" : ""}`;
+        btn.innerHTML = `
+          <span class="step-num">${step.num} ${isDone ? "✓" : ""}</span>
+          <span class="step-title-sm">${step.title}</span>
+        `;
+        btn.addEventListener("click", () => {
+          activeStepIndex = idx;
+          renderSteps();
+          renderStepDetail();
+        });
+        stepTabsEl.appendChild(btn);
+      });
+      updateProgressUI();
+    }
+
+    function renderStepDetail() {
+      const step = stepsData[activeStepIndex];
+      const isDone = completedSteps.includes(activeStepIndex);
+      stepDetailEl.innerHTML = `
+        <div class="step-detail-top">
+          <div>
+            <div class="subtitle-pill">${step.subtitle}</div>
+            <h3>${step.num}：${step.title}</h3>
+          </div>
+          <button class="btn ${isDone ? "" : "btn-primary"}" id="toggleStepDoneBtn" type="button">
+            ${isDone ? "已完成（點擊取消）" : "標記此階段已完成"}
+          </button>
+        </div>
+        <p style="color: var(--muted); margin-bottom: 0.9rem;">${step.desc}</p>
+        <p style="font-size: 0.9rem; color: var(--accent);"><strong>${step.action}</strong></p>
+      `;
+
+      document.getElementById("toggleStepDoneBtn").addEventListener("click", () => {
+        if (completedSteps.includes(activeStepIndex)) {
+          completedSteps = completedSteps.filter((i) => i !== activeStepIndex);
+        } else {
+          completedSteps.push(activeStepIndex);
+        }
+        saveSteps();
+        renderSteps();
+        renderStepDetail();
+      });
+    }
+
+    resetProgressBtn.addEventListener("click", () => {
+      completedSteps = [];
+      saveSteps();
+      renderSteps();
+      renderStepDetail();
+    });
+
+    // Pitfalls checklist persistence
+    const pitfallChecks = document.querySelectorAll(".pitfall-check");
+    const savedPitfalls = JSON.parse(localStorage.getItem(STORAGE_KEY_PITFALLS) || "{}");
+    pitfallChecks.forEach((chk) => {
+      const key = chk.dataset.key;
+      if (savedPitfalls[key]) chk.checked = true;
+      chk.addEventListener("change", () => {
+        savedPitfalls[key] = chk.checked;
+        localStorage.setItem(STORAGE_KEY_PITFALLS, JSON.stringify(savedPitfalls));
+      });
+    });
+
+    // Quote & ROI Estimator
+    const workflowCountInput = document.getElementById("workflowCount");
+    const aiComplexitySelect = document.getElementById("aiComplexity");
+    const retainerPlanSelect = document.getElementById("retainerPlan");
+    const savedHoursInput = document.getElementById("savedHours");
+    const hourlyCostInput = document.getElementById("hourlyCost");
+
+    function formatNTD(num) {
+      return "NT$ " + Math.round(num).toLocaleString("zh-Hant-TW");
+    }
+
+    function updateCalculator() {
+      const wfCount = Number(workflowCountInput.value);
+      const aiFee = Number(aiComplexitySelect.value);
+      const retainerFee = Number(retainerPlanSelect.value);
+      const hours = Number(savedHoursInput.value);
+      const rate = Number(hourlyCostInput.value);
+
+      document.getElementById("workflowCountVal").textContent = wfCount;
+      document.getElementById("savedHoursVal").textContent = hours;
+      document.getElementById("hourlyCostVal").textContent = rate.toLocaleString("zh-Hant-TW");
+
+      const baseSetup = 10000 + wfCount * 6000 + aiFee;
+      const monthlySavings = hours * rate;
+      const paybackMonths = monthlySavings > 0 ? (baseSetup / monthlySavings).toFixed(1) : "—";
+
+      document.getElementById("setupQuote").textContent = formatNTD(baseSetup);
+      document.getElementById("monthlyQuote").textContent =
+        retainerFee > 0 ? `${formatNTD(retainerFee)} / 月` : "NT$ 0（無月費）";
+      document.getElementById("monthlySavings").textContent = `${formatNTD(monthlySavings)} / 月`;
+      document.getElementById("paybackMonths").textContent =
+        paybackMonths === "—" ? "無法計算" : `約 ${paybackMonths} 個月`;
+    }
+
+    [workflowCountInput, aiComplexitySelect, retainerPlanSelect, savedHoursInput, hourlyCostInput].forEach((el) => {
+      el.addEventListener("input", updateCalculator);
+      el.addEventListener("change", updateCalculator);
+    });
+
+    // Theme Toggle
+    const themeToggleBtn = document.getElementById("themeToggle");
+    if (localStorage.getItem(STORAGE_KEY_THEME) === "light") {
+      document.body.classList.add("light");
+    }
+
+    themeToggleBtn.addEventListener("click", () => {
+      document.body.classList.toggle("light");
+      const mode = document.body.classList.contains("light") ? "light" : "dark";
+      localStorage.setItem(STORAGE_KEY_THEME, mode);
+    });
+
+    renderSteps();
+    renderStepDetail();
+    updateCalculator();
+  </script>
+</body>
+</html>
