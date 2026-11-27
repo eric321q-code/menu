@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b1730">
+<title>n8n 自動化接案創業學院</title>
+<style>
+:root{--bg:#081225;--panel:#101f3b;--panel2:#142747;--text:#edf4ff;--muted:#a9bad4;--cyan:#53d5e8;--blue:#6b91ff;--line:#294064;--green:#55d6a2;--gold:#ffd27a}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:linear-gradient(145deg,#071022,#0c1b35 55%,#081225);color:var(--text);font-family:system-ui,-apple-system,"Noto Sans TC",sans-serif;line-height:1.65}
+a{color:var(--cyan);text-decoration:none}.wrap{max-width:1160px;margin:auto;padding:0 20px}
+header{position:sticky;top:0;z-index:10;background:#081225eF;border-bottom:1px solid var(--line);backdrop-filter:blur(12px)}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:66px}.brand{font-weight:800;letter-spacing:.3px}.brand span{color:var(--cyan)}nav{display:flex;gap:16px;flex-wrap:wrap;font-size:14px}nav a{color:var(--muted)}nav a:hover{color:white}
+.hero{padding:76px 0 54px}.eyebrow{color:var(--cyan);font-weight:700;letter-spacing:2px;font-size:12px}.hero h1{font-size:clamp(34px,6vw,62px);line-height:1.15;margin:14px 0}.hero p{color:var(--muted);max-width:720px;font-size:17px}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:25px}.btn{display:inline-block;padding:11px 18px;border-radius:12px;background:linear-gradient(120deg,#39c6dc,#668dff);color:#061326;font-weight:800;border:0;cursor:pointer}.btn.secondary{background:transparent;color:var(--text);border:1px solid var(--line)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:30px 0}.stat,.card{background:linear-gradient(150deg,var(--panel),#0d1a31);border:1px solid var(--line);border-radius:18px;padding:20px}.stat strong{display:block;font-size:25px;color:var(--cyan)}.stat small,.muted{color:var(--muted)}
+section{padding:42px 0;scroll-margin-top:80px}.section-head{margin-bottom:22px}.section-head h2{font-size:29px;margin:0 0 6px}.section-head p{color:var(--muted);margin:0}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.grid.two{grid-template-columns:repeat(2,1fr)}.card h3{margin:0 0 8px;font-size:18px}.card p{color:var(--muted);margin:5px 0}.tag{display:inline-block;padding:3px 9px;border-radius:99px;background:#173657;color:var(--cyan);font-size:12px;margin:3px 4px 3px 0}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:12px;border-bottom:1px solid var(--line)}th{color:var(--cyan);font-weight:700}td{color:#dce7f8}.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:#0d1a31}
+.note{border-left:3px solid var(--gold);padding:12px 15px;background:#2a2630;border-radius:8px;color:#f5e8c9;margin:16px 0}
+.calc{display:grid;grid-template-columns:1fr 1fr;gap:22px}.field{margin:12px 0}.field label{display:block;color:var(--muted);font-size:14px;margin-bottom:5px}.field input,.field select{width:100%;padding:12px;border-radius:10px;border:1px solid var(--line);background:#08162b;color:var(--text);font:inherit}.result{background:linear-gradient(145deg,#123b51,#162c54);border:1px solid #34748a;border-radius:16px;padding:22px}.result strong{font-size:34px;color:var(--green);display:block}.checklist label{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);cursor:pointer}.checklist input{accent-color:var(--cyan);width:18px;height:18px;margin-top:4px}.progress{height:10px;background:#071225;border-radius:20px;overflow:hidden;margin:12px 0}.progress div{height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--blue));transition:width .2s}.steps{counter-reset:step}.step{position:relative;padding:4px 0 20px 48px;border-left:1px solid var(--line);margin-left:15px}.step:before{counter-increment:step;content:counter(step);position:absolute;left:-16px;top:0;background:#1c5270;border:2px solid var(--cyan);border-radius:50%;width:30px;height:30px;display:grid;place-items:center;font-weight:800}
+footer{border-top:1px solid var(--line);padding:30px 0;color:var(--muted);font-size:13px}.small{font-size:13px;color:var(--muted)}.pill{color:var(--green);font-weight:700}
+@media(max-width:800px){nav{display:none}.grid{grid-template-columns:1fr 1fr}.calc{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.wrap{padding:0 15px}.hero{padding:52px 0 30px}.grid,.grid.two,.stats{grid-template-columns:1fr}.section-head h2{font-size:25px}.stat strong{font-size:22px}th,td{padding:9px;font-size:13px}}
+</style>
+</head>
+<body>
+<header><div class="wrap nav"><div class="brand">⚡ <span>n8n</span> 自動化接案學院</div><nav><a href="#roadmap">學習路線</a><a href="#services">服務商品</a><a href="#pricing">報價參考</a><a href="#calculator">報價計算</a><a href="#process">接案流程</a><a href="#checklist">執行清單</a></nav></div></header>
+<main class="wrap">
+<section class="hero">
+<div class="eyebrow">AUTOMATION BUSINESS PLAYBOOK</div>
+<h1>把 n8n 技能，<br><span style="color:var(--cyan)">變成可銷售的服務。</span></h1>
+<p>從學會自動化、打造作品、設計服務方案，到報價、簽約與每月維護。這是一份可以在手機上操作的接案創業攻略，適合從第一個小型專案開始累積經驗。</p>
+<div class="actions"><a class="btn" href="#roadmap">開始學習路線</a><a class="btn secondary" href="#calculator">試算專案報價</a></div>
+<div class="stats"><div class="stat"><strong>01 → 04</strong><small>學習、作品、接案、維護</small></div><div class="stat"><strong>NT$2,000+</strong><small>小型自動化專案參考起點</small></div><div class="stat"><strong>月費收入</strong><small>用維護服務建立持續營收</small></div></div>
+</section>
+
+<section id="roadmap"><div class="section-head"><h2>01｜n8n 學習路線</h2><p>先掌握能做出成果的核心，再逐步增加整合能力。</p></div>
+<div class="grid">
+<div class="card"><span class="tag">基礎</span><h3>認識 n8n 與 Workflow</h3><p>了解工作流程、Trigger、Node、連線、執行紀錄與測試方式。</p></div>
+<div class="card"><span class="tag">核心技能</span><h3>Webhook、API、JSON</h3><p>理解 HTTP Request、GET/POST、Headers、Body、JSON 欄位與 Expression。</p></div>
+<div class="card"><span class="tag">通訊整合</span><h3>LINE Messaging API</h3><p>建立 LINE 官方帳號、Webhook、Reply/Push Message，妥善管理 Channel Access Token。</p></div>
+<div class="card"><span class="tag">資料管理</span><h3>Google Sheets 與資料庫</h3><p>新增、查詢、更新資料；理解欄位設計、唯一識別碼與資料備份。</p></div>
+<div class="card"><span class="tag">AI 應用</span><h3>AI 客服與知識庫</h3><p>設計提示詞、常見問題知識庫、人工轉接與 AI 回覆限制。</p></div>
+<div class="card"><span class="tag">上線能力</span><h3>錯誤處理與部署</h3><p>設定 Error Workflow、重試、通知、權限、憑證管理與服務監控。</p></div>
+</div></section>
+
+<section id="services"><div class="section-head"><h2>02｜把技能包裝成服務</h2><p>客戶買的是省下的時間、減少的錯誤與更順暢的營運，不是 n8n 節點數量。</p></div>
+<div class="grid">
+<div class="card"><h3>LINE 智慧預約系統</h3><p>顧客選服務、選日期時段、留下資料；自動寫入試算表並通知店家。</p><span class="tag">美容店</span><span class="tag">工作室</span><span class="tag">個人服務</span></div>
+<div class="card"><h3>AI 智能客服</h3><p>自動回答營業時間、服務項目、價格、地點與常見問題，必要時轉真人。</p><span class="tag">LINE OA</span><span class="tag">FAQ</span></div>
+<div class="card"><h3>CRM 顧客管理</h3><p>集中顧客基本資料、預約紀錄、回訪狀態與標籤，減少人工整理。</p><span class="tag">顧客資料</span><span class="tag">回訪提醒</span></div>
+<div class="card"><h3>訂單通知自動化</h3><p>收到表單或訂單後，自動整理資料、通知負責人並更新狀態。</p><span class="tag">訂單</span><span class="tag">通知</span></div>
+<div class="card"><h3>報表與資料整理</h3><p>定時彙整每日業績、表單資料或庫存資訊，寄送摘要報表。</p><span class="tag">Google Sheets</span><span class="tag">排程</span></div>
+<div class="card"><h3>客製化流程整合</h3><p>串接既有表單、雲端文件、通知工具或客戶授權使用的第三方服務。</p><span class="tag">API 串接</span><span class="tag">客製化</span></div>
+</div></section>
+
+<section id="pricing"><div class="section-head"><h2>03｜初期接案報價參考</h2><p>先用清楚的功能範圍與交付成果報價，不要只用「做幾個節點」計價。</p></div>
+<div class="table-wrap"><table><thead><tr><th>服務項目</th><th>初期建議參考價</th><th>報價時確認</th></tr></thead><tbody>
+<tr><td>簡單資料整理自動化</td><td>NT$2,000–5,000</td><td>資料來源、欄位、觸發方式</td></tr>
+<tr><td>Google Sheets 自動化</td><td>NT$3,000–8,000</td><td>新增/更新規則、權限、錯誤處理</td></tr>
+<tr><td>LINE 自動回覆</td><td>NT$5,000–10,000</td><td>訊息情境、關鍵字、回覆數量</td></tr>
+<tr><td>LINE AI 客服</td><td>NT$10,000–20,000</td><td>知識庫、AI 用量、真人轉接</td></tr>
+<tr><td>LINE 智慧預約</td><td>NT$12,000–25,000</td><td>服務、時段、取消改期、通知</td></tr>
+<tr><td>預約＋CRM</td><td>NT$20,000–40,000</td><td>顧客資料、標籤、回訪與報表</td></tr>
+<tr><td>客製化大型系統</td><td>NT$40,000 起</td><td>需先訪談、拆模組與評估風險</td></tr>
+</tbody></table></div>
+<div class="note">以上為新手接案初期的示意參考區間，不是固定市場行情或收入保證。實際價格需依需求複雜度、測試、資安、交付文件、時程與售後責任調整。</div>
+<div class="grid">
+<div class="card"><h3>固定專案報價</h3><p>適合需求與交付範圍明確的專案。先列清楚包含與不包含項目。</p></div>
+<div class="card"><h3>時薪計費</h3><p>適合顧問、除錯或需求尚未明確的工作。先約定估時與上限。</p></div>
+<div class="card"><h3>功能模組計價</h3><p>將預約、通知、顧客管理、報表拆開，方便客戶分階段採購。</p></div>
+<div class="card"><h3>月租訂閱</h3><p>適合持續提供系統使用、監控或固定服務的模式，需界定服務量。</p></div>
+<div class="card"><h3>建置＋維護</h3><p>一次收建置費，再按月收維護費，適合需要長期穩定運作的客戶。</p></div>
+</div></section>
+
+<section id="calculator"><div class="section-head"><h2>04｜互動報價計算器</h2><p>輸入預估工時與成本，快速估算專案報價。</p></div>
+<div class="card calc"><div>
+<div class="field"><label for="hours">預估工時（小時）</label><input id="hours" type="number" min="0" value="12"></div>
+<div class="field"><label for="rate">目標時薪（NT$）</label><input id="rate" type="number" min="0" value="600"></div>
+<div class="field"><label for="cost">其他成本（NT$）</label><input id="cost" type="number" min="0" value="500"></div>
+<div class="field"><label for="margin">風險／利潤加成率（%）</label><input id="margin" type="number" min="0" max="300" value="30"></div>
+</div><div class="result"><span class="muted">建議估算報價</span><strong id="quote">NT$10,010</strong><p id="breakdown" class="small">（12 × 600 + 500）× 1.3</p><p class="small">公式：（工時 × 時薪 + 其他成本）×（1 + 加成率）</p><div class="note">這是報價估算，不等於實際淨利。仍需考慮稅務、平台費、主機費、AI/API 用量、溝通與售後時間。</div></div></div></section>
+
+<section id="maintenance"><div class="section-head"><h2>05｜每月維護方案</h2><p>維護費是持續服務的費用，務必寫清楚服務界線。</p></div>
+<div class="grid">
+<div class="card"><span class="tag">基礎</span><h3>NT$500–1,000／月</h3><p>基本運作檢查、簡易錯誤通知、每月一次小幅設定檢查。</p></div>
+<div class="card"><span class="tag">標準</span><h3>NT$1,000–2,000／月</h3><p>定期監控、基本故障排查、每月維護摘要與有限次數的小調整。</p></div>
+<div class="card"><span class="tag">進階</span><h3>NT$2,000–4,000／月</h3><p>較頻繁監控、優先處理、備份檢查與約定範圍內的支援。</p></div>
+</div><div class="note">月費不等於無限修改。新增功能、流程大改、金流串接、第三方平台串接、超出約定工時的支援，應另外評估報價。主機、網域、AI/API 與簡訊等第三方費用應列明由誰支付。</div></section>
+
+<section id="example"><div class="section-head"><h2>06｜作品示範：莉蒂亞美學 LINE 智慧預約</h2><p>以下是可作為作品集的規劃範例，並非已實際部署的系統。</p></div>
+<div class="grid two">
+<div class="card"><h3>顧客預約流程</h3><div class="steps">
+<div class="step"><b>顧客進入 LINE 官方帳號</b><p class="small">點選預約入口或傳送預約關鍵字。</p></div>
+<div class="step"><b>選擇服務項目</b><p class="small">臉部保養、清粉刺、身體按摩。</p></div>
+<div class="step"><b>選擇日期與可預約時段</b><p class="small">依店家設定的營業時間與預約規則。</p></div>
+<div class="step"><b>填寫聯絡資料並確認</b><p class="small">顯示預約摘要，讓顧客確認資料。</p></div>
+<div class="step"><b>寫入資料並通知店家</b><p class="small">n8n 寫入 Google Sheets，並發送通知。</p></div>
+</div></div>
+<div class="card"><h3>建議系統架構</h3><p><span class="tag">LINE OA</span> 接收顧客訊息與操作</p><p style="text-align:center;color:var(--cyan)">↓ Webhook</p><p><span class="tag">n8n</span> 判斷流程、檢查欄位、處理預約</p><p style="text-align:center;color:var(--cyan)">↓ API</p><p><span class="tag">Google Sheets</span> 保存預約資料與狀態</p><p style="text-align:center;color:var(--cyan)">↓ 通知</p><p><span class="tag">LINE 店家通知</span> 提醒店家查看新預約</p><p class="small">正式上線前，還要處理時段鎖定、防止重複預約、取消改期、個資告知與權限。</p></div>
+</div></section>
+
+<section id="clients"><div class="section-head"><h2>07｜如何找到第一批客戶</h2><p>先找流程重複、訊息量大、容易漏單的店家，從小問題切入。</p></div>
+<div class="grid">
+<div class="card"><h3>美容／美甲／按摩店</h3><p>常見痛點：預約訊息散落、人工確認時段、顧客資料難整理。</p></div>
+<div class="card"><h3>餐飲與外帶店</h3><p>常見痛點：訂單通知、每日彙整、營業報表需要重複輸入。</p></div>
+<div class="card"><h3>個人工作室</h3><p>常見痛點：詢問重複、預約提醒、客戶追蹤與回訪。</p></div>
+</div>
+<p class="muted">開發話術方向：先詢問「目前哪個流程最花時間？」再展示一段能解決該痛點的 Demo。不要一開始就推銷複雜的 AI 系統。</p></section>
+
+<section id="process"><div class="section-head"><h2>08｜標準接案流程與合約重點</h2><p>每個階段留下文字紀錄，避免需求不斷增加卻沒有追加費用。</p></div>
+<div class="grid two">
+<div class="card"><div class="steps">
+<div class="step"><b>需求訪談</b><p class="small">了解現況、使用者、痛點、預算與成功標準。</p></div>
+<div class="step"><b>流程規劃與範圍確認</b><p class="small">畫出流程圖，列出功能、例外情況與不包含項目。</p></div>
+<div class="step"><b>正式報價與合約</b><p class="small">寫明交付物、時程、修改次數、維護與第三方費用。</p></div>
+<div class="step"><b>收取訂金 50%</b><p class="small">確認款項後開始開發；比例可依專案協議調整。</p></div>
+<div class="step"><b>開發、測試與驗收</b><p class="small">提供測試案例，讓客戶依約定標準驗收。</p></div>
+<div class="step"><b>收尾款 50% 並交付</b><p class="small">交付文件、操作說明、必要權限與備份。</p></div>
+<div class="step"><b>維護與後續合作</b><p class="small">依維護合約處理監控、修復與支援。</p></div>
+</div></div>
+<div class="card"><h3>合約至少寫清楚</h3><ul class="muted">
+<li>功能範圍、交付成果與不包含事項</li><li>開發時程、客戶提供資料的期限</li><li>付款方式、訂金與尾款條件</li><li>免費修改次數與需求變更計價方式</li><li>驗收期限、缺陷修復與維護範圍</li><li>主機、API、AI、LINE 等第三方費用</li><li>資料保護、帳號權限、資料保存與刪除</li><li>終止合作、帳號移交與備份責任</li></ul></div>
+</div>
+<div class="note">實務提醒：盡量讓客戶持有自己的 LINE、Google 與雲端服務帳號，使用授權方式連接；不要把客戶密碼或 API Token 明文放在文件或聊天訊息中。</div>
+</section>
+
+<section id="income"><div class="section-head"><h2>09｜每月維護收入試算</h2><p>試算經常性營收，評估服務組合是否可持續。</p></div>
+<div class="card calc"><div><div class="field"><label for="clientsCount">維護客戶數</label><input id="clientsCount" type="number" min="0" value="5"></div><div class="field"><label for="monthlyFee">平均每位客戶月費（NT$）</label><input id="monthlyFee" type="number" min="0" value="1500"></div></div><div class="result"><span class="muted">預估每月營收</span><strong id="monthlyIncome">NT$7,500</strong><p>預估每年營收：<b id="yearlyIncome">NT$90,000</b></p><p class="small">尚未扣除主機、API、工具訂閱、交通、工時、稅務與其他營運成本。</p></div></div></section>
+
+<section id="checklist"><div class="section-head"><h2>10｜你的第一個 30 天執行清單</h2><p>勾選完成項目，進度會自動保存在這台裝置的瀏覽器。</p></div>
+<div class="card checklist"><div class="pill" id="progressText">完成 0 / 12 項（0%）</div><div class="progress"><div id="progressBar"></div></div>
+<div id="tasks">
+<label><input type="checkbox" data-task="1">完成 n8n 基礎操作與第一個 Workflow</label>
+<label><input type="checkbox" data-task="2">學會 Webhook、HTTP Request 與 JSON</label>
+<label><input type="checkbox" data-task="3">建立 LINE 官方帳號測試環境</label>
+<label><input type="checkbox" data-task="4">串接 LINE Webhook 與 n8n</label>
+<label><input type="checkbox" data-task="5">完成 Google Sheets 新增與查詢資料</label>
+<label><input type="checkbox" data-task="6">加入錯誤通知與基本測試</label>
+<label><input type="checkbox" data-task="7">完成莉蒂亞美學預約 Demo 流程規劃</label>
+<label><input type="checkbox" data-task="8">錄製 1–3 分鐘作品展示影片</label>
+<label><input type="checkbox" data-task="9">整理服務內容、報價與維護方案</label>
+<label><input type="checkbox" data-task="10">準備需求訪談問題與報價單範本</label>
+<label><input type="checkbox" data-task="11">聯絡 3 家可能有需求的店家</label>
+<label><input type="checkbox" data-task="12">完成第一次需求訪談並修正方案</label>
+</div><div class="actions"><button class="btn secondary" id="resetTasks">重設清單</button><button class="btn" onclick="window.print()">列印／另存 PDF</button></div></div></section>
+</main>
+<footer><div class="wrap">n8n 自動化接案創業學院｜學習與接案規劃工具<br>請依實際需求、平台政策、個資法與客戶授權調整方案。價格為初期估算參考，非法律、稅務或財務建議。</div></footer>
+<script>
+const money=n=>new Intl.NumberFormat('zh-TW',{style:'currency',currency:'TWD',maximumFractionDigits:0}).format(Math.max(0,n));
+function calcQuote(){let h=+document.getElementById('hours').value||0,r=+document.getElementById('rate').value||0,c=+document.getElementById('cost').value||0,m=(+document.getElementById('margin').value||0)/100;let base=h*r+c,total=Math.round(base*(1+m));document.getElementById('quote').textContent=money(total);document.getElementById('breakdown').textContent=`（${h} × ${money(r)} + ${money(c)}）× ${1+m}`;}
+['hours','rate','cost','margin'].forEach(id=>document.getElementById(id).addEventListener('input',calcQuote));calcQuote();
+function calcIncome(){let n=+document.getElementById('clientsCount').value||0,f=+document.getElementById('monthlyFee').value||0;document.getElementById('monthlyIncome').textContent=money(n*f);document.getElementById('yearlyIncome').textContent=money(n*f*12);}
+['clientsCount','monthlyFee'].forEach(id=>document.getElementById(id).addEventListener('input',calcIncome));calcIncome();
+const boxes=[...document.querySelectorAll('[data-task]')];function updateTasks(){let done=boxes.filter(b=>b.checked).length,p=Math.round(done/boxes.length*100);document.getElementById('progressText').textContent=`完成 ${done} / ${boxes.length} 項（${p}%）`;document.getElementById('progressBar').style.width=p+'%';localStorage.setItem('n8nGuideTasks',JSON.stringify(boxes.map(b=>b.checked)));}
+try{let saved=JSON.parse(localStorage.getItem('n8nGuideTasks')||'null');if(Array.isArray(saved))boxes.forEach((b,i)=>b.checked=!!saved[i]);}catch(e){}boxes.forEach(b=>b.addEventListener('change',updateTasks));updateTasks();
+document.getElementById('resetTasks').addEventListener('click',()=>{boxes.forEach(b=>b.checked=false);updateTasks();});
+</script>
+</body></html>
